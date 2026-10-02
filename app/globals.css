@@ -1,0 +1,274 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-inter);
+  --font-heading: var(--font-inter);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-gold-muted: var(--gold-muted);
+  --color-gold-soft: var(--gold-soft);
+
+  /* Identidade formal (/formal): tokens definidos no escopo .theme-formal */
+  --font-display: var(--font-cormorant);
+  --color-navy: var(--f-navy);
+  --color-navy-deep: var(--f-navy-deep);
+  --color-navy-soft: var(--f-navy-soft);
+  --color-ivory: var(--f-ivory);
+  --color-paper: var(--f-paper);
+  --color-ink: var(--f-ink);
+  --color-ink-muted: var(--f-ink-muted);
+  --color-brass: var(--f-brass);
+  --color-brass-deep: var(--f-brass-deep);
+  --color-rule: var(--f-rule);
+  --color-risk-urgent: var(--f-risk-urgent);
+  --color-risk-positive: var(--f-risk-positive);
+  --color-risk-routine: var(--f-risk-routine);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Base: Dark Mode First e unico. Grafite/carvao profundo, nunca preto puro. */
+  --background: oklch(0.16 0.004 25);
+  --foreground: oklch(0.96 0.004 90);
+
+  --card: oklch(0.2 0.005 25);
+  --card-foreground: oklch(0.96 0.004 90);
+
+  --popover: oklch(0.19 0.005 25);
+  --popover-foreground: oklch(0.96 0.004 90);
+
+  --primary: oklch(0.96 0.004 90);
+  --primary-foreground: oklch(0.16 0.004 25);
+
+  --secondary: oklch(0.25 0.006 25);
+  --secondary-foreground: oklch(0.92 0.004 90);
+
+  --muted: oklch(0.24 0.005 25);
+  --muted-foreground: oklch(0.7 0.008 25);
+
+  --accent: oklch(0.27 0.007 25);
+  --accent-foreground: oklch(0.96 0.004 90);
+
+  --destructive: oklch(0.62 0.21 25);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.78 0.1 24 / 50%);
+
+  /* Acento unico Sangria (base #5E1816). --gold preenche botoes (passo mais vivo
+     para destacar do fundo sangria); --gold-soft e o tom claro para texto, icones
+     e bordas sobre fundo escuro (AA). */
+  --gold: oklch(0.45 0.145 27);
+  --gold-soft: oklch(0.78 0.1 24);
+  --gold-foreground: oklch(0.97 0.004 90);
+  --gold-muted: oklch(0.78 0.1 24 / 14%);
+
+  --radius: 0.75rem;
+}
+
+/*
+ * Identidade formal: marinho institucional + marfim (papel timbrado) + latao.
+ * Faixas marinho (hero, prova, CTA final) alternam com corpo em marfim para
+ * dar ritmo e conduzir o olhar ate os CTAs.
+ */
+/* Tokens no :root para tambem valerem em portais/overlays. */
+:root {
+  --f-navy: oklch(0.23 0.05 262);
+  --f-navy-deep: oklch(0.18 0.04 262);
+  --f-navy-soft: oklch(0.3 0.05 262);
+  --f-ivory: oklch(0.977 0.008 85);
+  --f-paper: oklch(0.952 0.013 85);
+  --f-ink: oklch(0.24 0.04 262);
+  --f-ink-muted: oklch(0.45 0.025 262);
+  /* Latao claro para fundos marinho; latao escuro para texto sobre marfim (AA). */
+  --f-brass: oklch(0.79 0.095 80);
+  --f-brass-deep: oklch(0.5 0.085 70);
+  --f-rule: oklch(0.24 0.04 262 / 12%);
+  --f-risk-urgent: oklch(0.55 0.17 28);
+  --f-risk-positive: oklch(0.52 0.1 160);
+  --f-risk-routine: oklch(0.58 0.02 262);
+}
+
+.theme-formal {
+  background: var(--f-ivory);
+  color: var(--f-ink);
+}
+
+.theme-formal ::selection {
+  background: oklch(0.79 0.095 80 / 35%);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+}
+
+@layer utilities {
+  .text-gold {
+    color: var(--gold-soft);
+  }
+
+  .bg-gold {
+    background-color: var(--gold);
+  }
+
+  .border-gold {
+    border-color: var(--gold-soft);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-neon-white {
+    color: #ffffff;
+    text-shadow:
+      0 0 10px rgba(255, 255, 255, 0.9),
+      0 0 20px rgba(255, 255, 255, 0.55),
+      0 0 35px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Fundo executivo: grafite com iluminacao de estudio vinda do topo. */
+.bg-executive {
+  background-color: #0b0d10;
+  background-image: radial-gradient(
+    circle at 50% 20%,
+    #1e232a 0%,
+    #0d0f12 70%,
+    #07080a 100%
+  );
+}
+
+/*
+ * Risca de giz + dobras de tecido: fios de 1px a cada 24px e faixas verticais
+ * suaves a cada 160px, ambos com opacidade minima. A mascara concentra o efeito
+ * sob a "luz" (topo/centro) e o dissolve nas bordas, preservando o contraste.
+ */
+.bg-executive-stripes {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.045) 0,
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 1px,
+      transparent 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      rgba(255, 255, 255, 0.028) 80px,
+      transparent 160px
+    );
+  -webkit-mask-image: radial-gradient(
+    ellipse 95% 85% at 50% 20%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 95% 85% at 50% 20%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 100%
+  );
+}
+
+/* React Bits: Aurora, Shiny Text, Star Border (apenas transform/opacity/background-position) */
+@keyframes aurora-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(5%, 8%) scale(1.08); }
+}
+
+@keyframes aurora-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-6%, 6%) scale(1.05); }
+}
+
+@keyframes shiny-text-sweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes star-border-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes beams-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-aurora-drift-1 {
+  animation: aurora-drift-1 14s ease-in-out infinite;
+}
+
+.animate-aurora-drift-2 {
+  animation: aurora-drift-2 18s ease-in-out infinite;
+}
+
+.animate-shiny-text {
+  animation: shiny-text-sweep 4.5s linear infinite;
+}
+
+.animate-star-border-spin {
+  animation: star-border-spin 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
