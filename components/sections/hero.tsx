@@ -90,13 +90,13 @@ export function Hero() {
           initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.01 : 0.7, delay: shouldReduceMotion ? 0 : 0.3 }}
-          className="w-full scroll-mt-24 rounded-2xl border border-border bg-card/60 p-6 shadow-2xl shadow-black/40 backdrop-blur-md sm:p-8 lg:ml-auto lg:max-w-md"
+          className="w-full scroll-mt-24 rounded-2xl border border-border bg-card/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-md sm:p-8 lg:ml-auto lg:max-w-md"
         >
           <h2 className="font-serif text-2xl font-semibold tracking-tight text-neon-white">
             Comece a gerir seu escritório com inteligência
           </h2>
           <p className="mt-3 mb-6 text-sm text-muted-foreground">
-            Cadastre-se para conhecer o CRM jurídico da Prosec: gestão de
+            Cadastre-se para conhecer o CRM jurídico da TechTie: gestão de
             carteira, painéis de BI e IA para LegalTech em uma única
             plataforma.
           </p>

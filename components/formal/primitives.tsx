@@ -111,7 +111,7 @@ export function Wordmark({ tone = "dark" }: { tone?: "light" | "dark" }) {
           tone === "dark" ? "text-ivory" : "text-ink",
         )}
       >
-        Prosec
+        TechTie
       </span>
     </span>
   );

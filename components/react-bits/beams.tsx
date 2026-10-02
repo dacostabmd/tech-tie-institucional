@@ -40,7 +40,7 @@ export function Beams({ className, ...props }: BeamsCanvasProps) {
         )}
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, transparent 0 6%, rgba(160,32,28,0.12) 9%, transparent 13%, transparent 20%, rgba(230,235,245,0.06) 23%, transparent 27%)",
+            "repeating-linear-gradient(90deg, transparent 0 6%, rgba(160,32,28,0.12) 9%, transparent 13%, transparent 20%, rgba(240,235,227,0.13) 23%, transparent 27%)",
         }}
       />
       {mounted && (

@@ -22,7 +22,7 @@ import { useReducedMotion } from "motion/react";
  * - perda de contexto WebGL (comum no mobile) recria o renderer.
  */
 export interface BeamsCanvasProps {
-  /** Cor das colunas brancas, as impares (rgb 0-1). */
+  /** Cor das colunas claras, as impares: porcelana (rgb 0-1). */
   color?: [number, number, number];
   /** Cor das colunas vermelhas, as pares (rgb 0-1). */
   accent?: [number, number, number];
@@ -69,7 +69,7 @@ const float TAU = 6.2831853;
 const float EDGE = 0.006;
 // Opacidade maxima relativa de cada familia de coluna (branco bem mais sutil).
 const float RED_GAIN = 0.65;
-const float WHITE_GAIN = 0.32;
+const float WHITE_GAIN = 0.67;
 
 float hash(float n) {
   return fract(sin(n * 127.1 + 311.7) * 43758.5453);
@@ -186,7 +186,7 @@ const ATTACK_S = 0.18;
 const RELEASE_S = 0.35;
 
 export default function BeamsCanvas({
-  color = [0.9, 0.92, 0.95],
+  color = [0.94, 0.92, 0.89],
   accent = [0.5, 0.1, 0.09],
   angle = 0,
   intensity = 0.85,

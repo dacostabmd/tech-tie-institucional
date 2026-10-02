@@ -32,7 +32,7 @@ export async function submitLeadForm(
     return { status: "error", message: "Informe um e-mail válido." };
   }
 
-  console.log("[Prosec] Novo lead recebido (simulado):", {
+  console.log("[TechTie] Novo lead recebido (simulado):", {
     name,
     email,
     oab,
@@ -44,6 +44,6 @@ export async function submitLeadForm(
   return {
     status: "success",
     message:
-      "Recebemos seus dados. Nossa equipe entrará em contato em breve para apresentar o CRM jurídico da Prosec.",
+      "Recebemos seus dados. Nossa equipe entrará em contato em breve para apresentar o CRM jurídico da TechTie.",
   };
 }

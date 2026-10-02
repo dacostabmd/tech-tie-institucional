@@ -38,7 +38,7 @@ export function FormalNavbar() {
       )}
     >
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-6">
-        <Link href="#inicio" aria-label="Prosec — início">
+        <Link href="#inicio" aria-label="TechTie — início">
           <Wordmark tone="dark" />
         </Link>
 

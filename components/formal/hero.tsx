@@ -167,7 +167,7 @@ export function FormalHero() {
             {...fade(0.25)}
             className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-ivory/75"
           >
-            A Prosec unifica a consulta em 27 tribunais, rastreia CPF e CNPJ em
+            A TechTie unifica a consulta em 27 tribunais, rastreia CPF e CNPJ em
             14 bases em paralelo e classifica cada andamento por risco — com
             resumos executivos gerados por IA, em um único painel.
           </motion.p>

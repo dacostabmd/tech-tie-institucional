@@ -3,7 +3,7 @@ import { siteConfig } from "@/lib/site-config";
 import { Wordmark } from "./primitives";
 
 const institutionalLinks = [
-  { href: "#", label: "Sobre a Prosec" },
+  { href: "#", label: "Sobre a TechTie" },
   { href: "#", label: "Política de privacidade" },
   { href: "#", label: "Termos de uso" },
 ];
@@ -66,7 +66,7 @@ export function FormalFooter() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-ivory/10 pt-8 text-xs text-ivory/45 sm:flex-row sm:justify-between">
           <p>
-            &copy; {year} Prosec. Todos os direitos reservados. CNPJ {siteConfig.cnpj} (placeholder).
+            &copy; {year} TechTie. Todos os direitos reservados. CNPJ {siteConfig.cnpj} (placeholder).
           </p>
           <p>Este site não oferece consultoria jurídica nem garante resultado processual.</p>
         </div>

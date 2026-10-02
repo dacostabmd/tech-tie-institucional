@@ -1,7 +1,7 @@
-# Prosec — Landing Page
+# TechTie — Landing Page
 
 Landing page de uma pagina (Next.js 15, App Router, TypeScript, SSG) para o
-produto Prosec, plataforma de acompanhamento processual juridico
+produto TechTie, plataforma de acompanhamento processual juridico
 inteligente.
 
 ## Stack
@@ -74,7 +74,7 @@ reais antes de colocar o site no ar:
    plausiveis, mas ilustrativos. Ajustar com dados reais e validados
    antes de publicar.
 7. **Links institucionais do rodape** (`components/sections/footer.tsx`)
-   — "Sobre a Prosec", "Politica de privacidade" e "Termos de uso" apontam
+   — "Sobre a TechTie", "Politica de privacidade" e "Termos de uso" apontam
    para `#` (placeholder). Criar as paginas correspondentes e atualizar os
    links.
 8. **Open Graph image** (`app/layout.tsx`, referencia a
@@ -83,7 +83,7 @@ reais antes de colocar o site no ar:
 9. **Logo** (`app/layout.tsx`, referencia a `/logo.png` no JSON-LD) —
    adicionar arquivo de logo real em `public/logo.png`.
 10. **URL do site** (`app/layout.tsx`, `app/sitemap.ts`,
-    `app/robots.ts` — constante `siteUrl`/`https://www.prosec.com.br`) —
+    `app/robots.ts` — constante `siteUrl`/`https://www.techtie.com.br`) —
     confirmar o dominio definitivo de producao.
 11. **Server Action do formulario** (`app/actions/lead.ts`) — hoje apenas
     simula o envio com `console.log`. Integrar com o servico real (CRM,

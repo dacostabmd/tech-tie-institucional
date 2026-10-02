@@ -10,9 +10,9 @@ import { ctaClassName, SectionHeading } from "./primitives";
 // impediria o cadastro.
 const faqs = [
   {
-    question: "A Prosec garante resultado em processos judiciais?",
+    question: "A TechTie garante resultado em processos judiciais?",
     answer:
-      "Não. A Prosec é uma ferramenta de acompanhamento e organização processual. Ela não oferece consultoria jurídica nem garante qualquer resultado em processos judiciais, que dependem exclusivamente da análise técnica do advogado responsável.",
+      "Não. A TechTie é uma ferramenta de acompanhamento e organização processual. Ela não oferece consultoria jurídica nem garante qualquer resultado em processos judiciais, que dependem exclusivamente da análise técnica do advogado responsável.",
   },
   {
     question: "É possível testar a plataforma antes de contratar?",
@@ -32,7 +32,7 @@ const faqs = [
   {
     question: "Preciso instalar algum programa?",
     answer:
-      "Não. A Prosec é uma plataforma web: basta um navegador atualizado para consultar e acompanhar os processos.",
+      "Não. A TechTie é uma plataforma web: basta um navegador atualizado para consultar e acompanhar os processos.",
   },
   {
     question: "Consultores conseguem ver processos de terceiros?",
@@ -40,7 +40,7 @@ const faqs = [
       "Não. O acesso de consultores é restrito aos processos vinculados ao próprio CPF ou CNPJ, respeitando o escopo de titularidade dos dados.",
   },
   {
-    question: "Como a Prosec trata dados pessoais e sigilo profissional?",
+    question: "Como a TechTie trata dados pessoais e sigilo profissional?",
     answer:
       "Os dados são tratados em conformidade com a LGPD, com criptografia e controles de acesso que buscam preservar o sigilo profissional entre advogado e cliente.",
   },

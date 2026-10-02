@@ -8,18 +8,18 @@ const inter = Inter({
   display: "swap",
 });
 
-const siteUrl = "https://www.prosec.com.br";
+const siteUrl = "https://www.techtie.com.br";
 
-const siteTitle = "Prosec | CRM jurídico com Business Intelligence e IA para LegalTech";
+const siteTitle = "TechTie | CRM jurídico com Business Intelligence e IA para LegalTech";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: siteTitle,
-    template: "%s | Prosec",
+    template: "%s | TechTie",
   },
   description:
-    "Prosec é um CRM jurídico com Business Intelligence integrado e inteligência artificial para LegalTech: gestão de clientes e carteira, acompanhamento processual em 27 tribunais, painéis de BI e IA para escritórios de advocacia.",
+    "TechTie é um CRM jurídico com Business Intelligence integrado e inteligência artificial para LegalTech: gestão de clientes e carteira, acompanhamento processual em 27 tribunais, painéis de BI e IA para escritórios de advocacia.",
   keywords: [
     "crm jurídico",
     "crm para advogados",
@@ -30,12 +30,12 @@ export const metadata: Metadata = {
     "acompanhamento processual",
     "gestão de carteira de processos",
   ],
-  authors: [{ name: "Prosec" }],
+  authors: [{ name: "TechTie" }],
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: siteUrl,
-    siteName: "Prosec",
+    siteName: "TechTie",
     title: siteTitle,
     description:
       "Gerencie clientes e processos, enxergue o escritório em painéis de BI e conte com IA feita para LegalTech. Sigilo profissional e conformidade com a LGPD.",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Prosec - CRM jurídico com Business Intelligence e IA para LegalTech",
+        alt: "TechTie - CRM jurídico com Business Intelligence e IA para LegalTech",
       },
     ],
   },
@@ -67,7 +67,7 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "Prosec",
+      name: "TechTie",
       url: siteUrl,
       logo: `${siteUrl}/logo.png`,
       description:
@@ -75,7 +75,7 @@ const jsonLd = {
     },
     {
       "@type": "SoftwareApplication",
-      name: "Prosec",
+      name: "TechTie",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       description:

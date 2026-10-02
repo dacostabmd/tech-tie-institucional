@@ -37,7 +37,7 @@ export function FormalSecurity() {
           <SectionHeading
             eyebrow="Segurança e conformidade"
             title="Sigilo profissional como premissa, não como recurso."
-            description="A Prosec trata dados processuais e pessoais com controles técnicos e organizacionais alinhados à legislação vigente."
+            description="A TechTie trata dados processuais e pessoais com controles técnicos e organizacionais alinhados à legislação vigente."
           />
         </div>
 

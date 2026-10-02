@@ -57,7 +57,7 @@ export function FormalProblem() {
         </StaggerContainer>
 
         <p className="mt-16 max-w-3xl border-l-2 border-brass-deep pl-6 font-display text-2xl leading-snug text-ink italic sm:text-3xl">
-          A Prosec reúne, classifica e resume os andamentos — para que a equipe
+          A TechTie reúne, classifica e resume os andamentos — para que a equipe
           dedique o tempo ao que exige análise jurídica.
         </p>
       </div>

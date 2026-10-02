@@ -16,7 +16,7 @@ const steps = [
   {
     title: "Varredura unificada",
     description:
-      "A Prosec consulta 27 tribunais estaduais e federais e rastreia 14 bases em paralelo.",
+      "A TechTie consulta 27 tribunais estaduais e federais e rastreia 14 bases em paralelo.",
   },
   {
     title: "Receba o essencial",
