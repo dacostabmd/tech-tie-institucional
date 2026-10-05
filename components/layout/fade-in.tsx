@@ -24,7 +24,7 @@ export function FadeIn({ children, className, delay = 0, y = 24 }: FadeInProps) 
       opacity: 1,
       y: 0,
       transition: {
-        duration: shouldReduceMotion ? 0.01 : 0.6,
+        duration: shouldReduceMotion ? 0.01 : 0.2,
         delay: shouldReduceMotion ? 0 : delay,
         ease: [0.21, 0.47, 0.32, 0.98],
       },
@@ -48,7 +48,7 @@ export const staggerContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.12,
+      staggerChildren: 0.06,
     },
   },
 };

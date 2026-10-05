@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { submitLeadForm, type LeadFormState } from "@/app/actions/lead";
@@ -12,6 +13,7 @@ const inputClassName =
   "h-11 rounded-lg border border-input bg-card px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-gold-soft focus-visible:ring-3 focus-visible:ring-gold-soft/25";
 
 export function LeadForm() {
+  const t = useTranslations("LeadForm");
   const [state, formAction, isPending] = useActionState(
     submitLeadForm,
     initialState,
@@ -21,17 +23,24 @@ export function LeadForm() {
     return (
       <Alert className="border-gold-soft/30 bg-gold-muted">
         <CheckCircle2 className="size-4 text-gold" />
-        <AlertTitle className="text-foreground">Cadastro recebido</AlertTitle>
-        <AlertDescription>{state.message}</AlertDescription>
+        <AlertTitle className="text-foreground">{t("successTitle")}</AlertTitle>
+        <AlertDescription>{t("successMessage")}</AlertDescription>
       </Alert>
     );
   }
+
+  const errorMessage =
+    state.status === "error"
+      ? state.reason === "invalid-email"
+        ? t("errorInvalidEmail")
+        : t("errorMissingFields")
+      : null;
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <label htmlFor="name" className="text-sm text-muted-foreground">
-          Nome completo
+          {t("nameLabel")}
         </label>
         <input
           id="name"
@@ -39,12 +48,12 @@ export function LeadForm() {
           type="text"
           required
           className={inputClassName}
-          placeholder="Seu nome"
+          placeholder={t("namePlaceholder")}
         />
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor="email" className="text-sm text-muted-foreground">
-          E-mail profissional
+          {t("emailLabel")}
         </label>
         <input
           id="email"
@@ -52,32 +61,30 @@ export function LeadForm() {
           type="email"
           required
           className={inputClassName}
-          placeholder="voce@escritorio.com.br"
+          placeholder={t("emailPlaceholder")}
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="oab" className="text-sm text-muted-foreground">
-          OAB (opcional)
+        <label htmlFor="company" className="text-sm text-muted-foreground">
+          {t("oabLabel")}
         </label>
         <input
-          id="oab"
-          name="oab"
+          id="company"
+          name="company"
           type="text"
           className={inputClassName}
-          placeholder="Número de inscrição"
+          placeholder={t("oabPlaceholder")}
         />
       </div>
 
-      {state.status === "error" && (
-        <p className="text-sm text-destructive">{state.message}</p>
-      )}
+      {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
 
       <Button
         type="submit"
         disabled={isPending}
         className="mt-2 h-12 w-full border-transparent bg-gold text-base text-gold-foreground transition-colors hover:bg-gold/90"
       >
-        {isPending ? "Enviando..." : "Testar grátis"}
+        {isPending ? t("submitting") : t("submit")}
       </Button>
     </form>
   );

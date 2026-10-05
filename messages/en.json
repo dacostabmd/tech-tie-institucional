@@ -1,0 +1,103 @@
+{
+  "Metadata": {
+    "title": "TechTie | BI dashboards, CRM, automation and AI for your business",
+    "description": "TechTie builds tailored technology solutions: Business Intelligence dashboards, CRMs, automations and integrations, artificial intelligence, data enrichment, institutional websites and landing pages.",
+    "keywords": "bi dashboards, business intelligence, crm, process automation, integrations, artificial intelligence, data enrichment, website development, landing pages, software development",
+    "ogDescription": "Intelligence dashboards, CRMs, automations, AI and data enrichment in tailored solutions for your business. From strategy to delivery, with real technology.",
+    "ogImageAlt": "TechTie - Technology solutions: dashboards, CRM, automation and AI",
+    "twitterDescription": "BI dashboards, CRM, automations, AI and data enrichment: tailored technology solutions for your business.",
+    "organizationDescription": "Technology solutions company: Business Intelligence dashboards, CRMs, automations, artificial intelligence, data enrichment, institutional websites and landing pages.",
+    "applicationDescription": "Tailored technology solutions — Business Intelligence dashboards, CRM, automations and integrations, artificial intelligence and data enrichment — for businesses of any industry."
+  },
+  "Navbar": {
+    "home": "Home",
+    "produtos": "Products",
+    "servicos": "Services",
+    "contato": "Contact",
+    "sobre": "About TechTie",
+    "logoAriaLabel": "TechTie, back to top",
+    "ctaLong": "Talk to a specialist",
+    "ctaShort": "Talk to us",
+    "openMenu": "Open menu"
+  },
+  "Hero": {
+    "eyebrow": "Technology tailored to your business",
+    "titleLine1": "Applied technology:",
+    "titleLine2": "The path to digital prosperity",
+    "paragraph": "<brand>TECHTIE</brand> turns data and processes into real results, with dashboards, automations and artificial intelligence tailored to your business. Grow efficiently and generate lasting value.",
+    "cardCrm": "CRM",
+    "cardDataEnrich": "Data enrichment",
+    "cardLawsuits": "Websites and landing pages",
+    "cardOperations": "Operational management solutions",
+    "cardDashboards": "Intelligence dashboards (BI)",
+    "cardAutomation": "AI-powered automations and integrations"
+  },
+  "HowItWorks": {
+    "heading": "Three fronts, one operation",
+    "intro": "Automation to organize the operation, Business Intelligence to see it clearly, and artificial intelligence to accelerate it — integrated from the ground up, not patched together with loose tools.",
+    "pillarCrmLabel": "CRM and automation",
+    "pillarCrmTagline": "Organize your business operation.",
+    "pillarBiLabel": "Business Intelligence",
+    "pillarBiTagline": "See the numbers that matter.",
+    "pillarIaLabel": "Artificial intelligence",
+    "pillarIaTagline": "Speed up your team's work.",
+    "itemClientsTitle": "Tailored CRM",
+    "itemClientsDescription": "Clients, sales pipeline, deadlines and tasks in one place, with a complete relationship history, account owners and automated notifications — built around your business process.",
+    "itemLawsuitsTitle": "Automations and integrations",
+    "itemLawsuitsDescription": "Automated flows between systems, WhatsApp, forms and spreadsheets, with API integrations that eliminate manual, repetitive work from the operation.",
+    "itemBiTitle": "Business Intelligence dashboards",
+    "itemBiDescription": "Tailored dashboards covering sales, operations, productivity and risk, with no spreadsheet exports or external tools to rely on. Decisions based on your own business data.",
+    "itemIndicatorsTitle": "Management indicators",
+    "itemIndicatorsDescription": "Volume by area, channel and stage, risk concentration and workload per owner, to guide staffing, priorities and investment.",
+    "itemRiskTitle": "AI-powered classification and summaries",
+    "itemRiskDescription": "Every event is automatically classified — urgent, positive or routine — and summarized in plain language, prioritizing the team's workload.",
+    "itemAssistantTitle": "Conversational AI assistant",
+    "itemAssistantDescription": "AI trained on your business context: query data, request summaries and find information in natural language, right inside your system."
+  },
+  "About": {
+    "eyebrow": "About TechTie",
+    "heading": "Technology born from practice, built for any business",
+    "paragraph1": "TechTie was born from the experience of Dr. Bruno Durão, partner at BMD Dap Advocacia, one of the country's largest law firms, after facing firsthand the same problem that slows down most companies: information scattered across spreadsheets, systems that don't talk to each other, and manual processes that drain the team's time. The solution built to fix that became a product — and today TechTie brings that same technology to businesses in any industry.",
+    "paragraph2": "We build Business Intelligence dashboards, CRMs, automations and integrations, artificial intelligence, data enrichment, and also institutional websites and landing pages — always tailored, to give managers a clear view of the operation and decisions based on data, not outdated spreadsheets."
+  },
+  "LeadSection": {
+    "heading": "Schedule a free consultation",
+    "paragraph": "Discover TechTie's solutions: BI dashboards, CRM, automations, AI and data enrichment tailored to your business. Leave your details and a specialist will reach out to understand your operation.",
+    "disclaimer": "Your details are used only for business contact and are never shared with third parties.",
+    "formHeading": "Start managing your business with intelligence",
+    "formSubheading": "Sign up and talk to our team."
+  },
+  "LeadForm": {
+    "nameLabel": "Full name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Work email",
+    "emailPlaceholder": "you@company.com",
+    "oabLabel": "Company (optional)",
+    "oabPlaceholder": "Your company name",
+    "submit": "Talk to a specialist",
+    "submitting": "Sending...",
+    "successTitle": "Submission received",
+    "successMessage": "We've received your details. Our team will reach out shortly to introduce TechTie's solutions.",
+    "errorMissingFields": "Fill in your name and email to continue.",
+    "errorInvalidEmail": "Enter a valid email address."
+  },
+  "Footer": {
+    "description": "Tailored technology solutions: Business Intelligence dashboards, CRM, automations and integrations, artificial intelligence and data enrichment for your business.",
+    "institutionalHeading": "Company",
+    "linkAbout": "About TechTie",
+    "linkPrivacy": "Privacy policy",
+    "linkTerms": "Terms of use",
+    "contactHeading": "Contact",
+    "copyright": "© {year} TechTie. All rights reserved. Company ID {cnpj} (placeholder).",
+    "legalDisclaimer": "Results may vary depending on each business's operation and data."
+  },
+  "WhatsappFloat": {
+    "ariaLabel": "Chat on WhatsApp (placeholder number)"
+  },
+  "LanguageSwitcher": {
+    "ariaLabel": "Select language",
+    "pt-BR": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}

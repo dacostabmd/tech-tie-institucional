@@ -1,108 +1,129 @@
 "use client";
 
+import type { ComponentType } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { LeadForm } from "@/components/sections/lead-form";
-import { whatsappHref } from "@/lib/site-config";
+import { ArrowUpRight } from "lucide-react";
+import {
+  ChatBoltIcon,
+  CrmIcon,
+  DashboardIcon,
+  DataEnrichIcon,
+  GearsIcon,
+  IconDefs,
+  ScalesIcon,
+} from "@/components/sections/hero-icons";
 
+// Solucoes em duas colunas, abaixo do texto, na coluna da esquerda. A logo fica na
+// coluna da direita; os circuitos do WebGL ligam a logo aos tres cartoes da coluna
+// de cartoes mais proxima dela (indices impares).
+const cards: { key: string; href: string; Icon: ComponentType }[] = [
+  { key: "cardCrm", href: "/produtos", Icon: CrmIcon },
+  { key: "cardDataEnrich", href: "/produtos", Icon: DataEnrichIcon },
+  { key: "cardLawsuits", href: "/servicos", Icon: ScalesIcon },
+  { key: "cardOperations", href: "/produtos", Icon: GearsIcon },
+  { key: "cardDashboards", href: "/produtos", Icon: DashboardIcon },
+  { key: "cardAutomation", href: "/servicos", Icon: ChatBoltIcon },
+];
+
+/**
+ * Hero. A cena WebGL (logo dourada, circuitos, piso) vive no fundo da pagina e se
+ * ancora nos elementos marcados com `data-scene-anchor` (ver beams-canvas.tsx).
+ * As ancoras ficam em wrappers sem transform, para a posicao lida ser a final.
+ */
 export function Hero() {
+  const t = useTranslations("Hero");
   const shouldReduceMotion = useReducedMotion();
+  const rise = (delay: number, distance = 24) => ({
+    initial: { opacity: 0, y: shouldReduceMotion ? 0 : distance },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: shouldReduceMotion ? 0.01 : 0.7, delay: shouldReduceMotion ? 0 : delay },
+  });
 
   return (
-    <section className="relative flex items-center overflow-hidden lg:min-h-[70vh]">
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:gap-16">
-        <div className="flex flex-col items-start">
+    <section id="topo" className="relative flex min-h-[100svh] flex-col">
+      <IconDefs />
+
+      <div className="mx-auto grid w-full max-w-[96rem] flex-1 items-center gap-x-12 gap-y-8 px-6 py-6 xl:grid-cols-[minmax(0,1fr)_auto]">
+        {/* Coluna da esquerda: texto e cartoes de solucoes. */}
+        <div className="flex flex-col items-start xl:mb-10">
           <motion.span
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.6 }}
-            className="mb-6 inline-flex items-center text-xs font-semibold tracking-wider text-neon-white uppercase"
+            {...rise(0)}
+            className="mb-5 text-xs font-semibold tracking-[0.18em] text-gold-soft uppercase"
           >
-            CRM jurídico para advogados e escritórios
+            {t("eyebrow")}
           </motion.span>
 
           <motion.h1
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.7, delay: shouldReduceMotion ? 0 : 0.1 }}
-            className="text-balance font-serif text-4xl font-semibold leading-[1.1] tracking-tight text-neon-white sm:text-5xl"
+            {...rise(0.1)}
+            className="text-balance leading-[1.12] tracking-wide uppercase"
           >
-            O CRM jurídico com BI integrado e IA feita para LegalTech
+            <span className="block text-[clamp(1.5rem,2.2vw,2.35rem)] font-bold text-gold-soft">
+              {t("titleLine1")}
+            </span>
+            <span className="mt-1 block text-[clamp(1.4rem,2vw,2.2rem)] font-light text-foreground/90">
+              {t("titleLine2")}
+            </span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.7, delay: shouldReduceMotion ? 0 : 0.2 }}
-            className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-foreground/80"
+            {...rise(0.2)}
+            className="mt-6 max-w-md text-base leading-relaxed text-foreground/80"
           >
-            Centralize clientes, processos e prazos em um único sistema,
-            acompanhe 27 tribunais estaduais e federais, enxergue a operação
-            do escritório em painéis de Business Intelligence e conte com uma
-            inteligência artificial treinada para o contexto jurídico — com
-            sigilo profissional e conformidade com a LGPD.
+            {t.rich("paragraph", {
+              brand: (chunks) => (
+                <strong className="font-semibold text-gold-soft">{chunks}</strong>
+              ),
+            })}
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.7, delay: shouldReduceMotion ? 0 : 0.3 }}
-            className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
-          >
-            <Button
-              asChild
-              size="lg"
-              className="group h-12 bg-gold px-6 text-base text-gold-foreground transition-colors hover:bg-gold/90 lg:hidden"
-            >
-              <Link href="#cadastro">
-                Testar grátis
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="h-12 border-border bg-transparent px-6 text-base text-foreground hover:bg-accent"
-            >
-              <Link href={whatsappHref} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="size-4" />
-                Falar no WhatsApp
-              </Link>
-            </Button>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.7, delay: shouldReduceMotion ? 0 : 0.4 }}
-            className="mt-8 text-xs text-muted-foreground"
-          >
-            Acesso de consultores restrito ao próprio CPF ou CNPJ. Sem promessa
-            de resultado processual.
-          </motion.p>
+          <ul className="mt-8 grid w-full max-w-[34rem] grid-cols-2 gap-3">
+            {cards.map(({ key, href, Icon }, i) => (
+              <li
+                key={key}
+                // Ancora dos circuitos: so os cartoes da coluna da direita do grupo, a
+                // que fica ao lado da logo (i impar).
+                data-scene-anchor={i % 2 === 1 ? `card-${(i - 1) / 2}` : undefined}
+                className="min-h-[7rem] transition-[filter] duration-300 focus-within:drop-shadow-[0_0_14px_rgba(233,195,95,0.35)] hover:drop-shadow-[0_0_14px_rgba(233,195,95,0.35)]"
+              >
+                <motion.div {...rise(0.3 + i * 0.07, 16)} className="h-full">
+                  <Link
+                    href={href}
+                    className="hero-card group h-full min-h-[7rem] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-soft"
+                  >
+                    <span aria-hidden="true" className="hero-card-body" />
+                    <span className="relative flex h-full flex-col justify-between gap-2 px-4 py-3">
+                      <span className="flex items-start justify-between">
+                        <span className="h-[3rem] w-[4rem]">
+                          <Icon />
+                        </span>
+                        <ArrowUpRight
+                          className="size-4 text-gold-soft/80 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold-soft"
+                          strokeWidth={1.5}
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span className="text-[0.7rem] leading-snug font-medium tracking-[0.1em] text-gold-soft uppercase">
+                        {t(key)}
+                      </span>
+                    </span>
+                  </Link>
+                </motion.div>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <motion.div
-          id="cadastro"
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: shouldReduceMotion ? 0.01 : 0.7, delay: shouldReduceMotion ? 0 : 0.3 }}
-          className="w-full scroll-mt-24 rounded-2xl border border-border bg-card/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-md sm:p-8 lg:ml-auto lg:max-w-md"
-        >
-          <h2 className="font-serif text-2xl font-semibold tracking-tight text-neon-white">
-            Comece a gerir seu escritório com inteligência
-          </h2>
-          <p className="mt-3 mb-6 text-sm text-muted-foreground">
-            Cadastre-se para conhecer o CRM jurídico da TechTie: gestão de
-            carteira, painéis de BI e IA para LegalTech em uma única
-            plataforma.
-          </p>
-          <LeadForm />
-        </motion.div>
+        {/* Coluna da direita: reserva o espaco da logo (proporcao 4:5) desenhada pelo WebGL. */}
+        <div
+          data-scene-anchor="logo"
+          aria-hidden="true"
+          className="mx-auto aspect-[4/5] h-[min(40svh,22rem)] xl:mx-0 xl:mr-[4vw] xl:h-[min(52svh,34rem)]"
+        />
       </div>
+
+      <div data-scene-anchor="hero-end" className="relative z-10 flex justify-center px-6 pt-4 pb-10" />
     </section>
   );
 }

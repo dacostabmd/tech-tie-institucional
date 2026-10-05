@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Mesh, Program, Renderer, Triangle } from "ogl";
+import { Mesh, Program, Renderer, Texture, Triangle } from "ogl";
 import { useReducedMotion } from "motion/react";
+import { LOGO_ASPECT, buildLogoSvg } from "@/lib/techtie-logo";
+import { fragment, vertex } from "./beams-shader";
 
 /**
  * Beams (React Bits, reescrito) — colunas verticais de luz com bordas nitidas.
@@ -11,20 +13,31 @@ import { useReducedMotion } from "motion/react";
  * coluna tem largura e nivel de brilho proprios e um gradiente vertical suave
  * que se desloca com o tempo.
  *
- * Velocidade: o tempo so corre quando o usuario interage (mouse, roda, scroll
- * ou toque). Em repouso a velocidade e `idleSpeed` (0) e o loop de render para.
+ * Velocidade: o tempo das colunas so corre quando o usuario interage (mouse, roda,
+ * scroll ou toque); em repouso e `idleSpeed` (0).
+ *
+ * Cena do hero (`hero`): sobre as colunas, o shader desenha a logo dourada (textura
+ * gerada por lib/techtie-logo.ts) e circuitos com pulsos de luz. A arte fica presa ao documento (rola com a pagina) e se
+ * ancora nos elementos HTML marcados com `data-scene-anchor`:
+ *   "logo"            caixa onde a logo e desenhada (proporcao 4:5);
+ *   "card-0|1|2"      cartoes da coluna da direita do grupo a esquerda da logo (os
+ *                     circuitos terminam no lado direito deles);
+ *   "hero-end"        rodape do hero (marca o fim da area animada).
+ * Sem esses elementos a cena nao e desenhada e sobram so as colunas.
  *
  * Performance:
  * - render pausado fora da viewport, com a aba oculta e em repouso (rAF cancelado);
+ * - com o hero visivel o loop segue em ~30 quadros/s (brilho, pulsos, cintilar);
+ *   rolado para fora do hero, volta a parar em repouso;
  * - DPR limitado e qualidade adaptativa: se o frame time passar de ~24 ms,
- *   a resolucao interna cai em degraus (as colunas sao suaves, ninguem nota);
- * - movimento reduzido: um unico frame estatico, sem loop;
+ *   a resolucao interna cai em degraus;
+ * - movimento reduzido: frame estatico, redesenhado so no resize e no scroll;
  * - perda de contexto WebGL (comum no mobile) recria o renderer.
  */
 export interface BeamsCanvasProps {
-  /** Cor das colunas claras, as impares: porcelana (rgb 0-1). */
+  /** Cor das colunas claras, as impares: grafite (rgb 0-1). */
   color?: [number, number, number];
-  /** Cor das colunas vermelhas, as pares (rgb 0-1). */
+  /** Cor das colunas de acento, as pares: preto (rgb 0-1). */
   accent?: [number, number, number];
   /** Rotacao das colunas em radianos (0 = vertical). */
   angle?: number;
@@ -34,142 +47,22 @@ export interface BeamsCanvasProps {
   speed?: number;
   /** Velocidade em repouso, sem mouse/scroll/toque. */
   idleSpeed?: number;
+  /** Desenha a cena do hero (logo e circuitos) ancorada no HTML. */
+  hero?: boolean;
   /** Chamado apos o primeiro frame desenhado (para o fade-in). */
   onReady?: () => void;
   className?: string;
 }
 
-const vertex = `
-attribute vec2 position;
-void main() {
-  gl_Position = vec4(position, 0.0, 1.0);
-}`;
-
-const fragment = `
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-
-uniform float uTime;
-uniform vec2 uRes;
-uniform vec3 uColor;
-uniform vec3 uAccent;
-uniform vec2 uPointer;
-uniform float uScroll;
-uniform float uAngle;
-uniform float uIntensity;
-uniform float uGrain;
-
-const int BEAMS = 16;
-const float NBEAMS = 16.0;
-const float TAU = 6.2831853;
-// Suavizacao da borda entre colunas (anti-alias, em unidades de coluna).
-const float EDGE = 0.006;
-// Opacidade maxima relativa de cada familia de coluna (branco bem mais sutil).
-const float RED_GAIN = 0.65;
-const float WHITE_GAIN = 0.67;
-
-float hash(float n) {
-  return fract(sin(n * 127.1 + 311.7) * 43758.5453);
+interface Anchors {
+  /** Centro e meias-dimensoes da logo, em unidades de cena. */
+  logo: [number, number, number, number];
+  /** Pontos onde os circuitos da esquerda terminam (um por cartao). */
+  cards: [number, number][];
+  cardsOn: boolean;
+  /** Posicao do documento (px) a partir da qual o hero saiu da tela. */
+  bottom: number;
 }
-
-float hash2(vec2 p) {
-  p = fract(p * vec2(123.34, 456.21));
-  p += dot(p, p + 45.32);
-  return fract(p.x * p.y);
-}
-
-// Larguras irregulares: algumas colunas estreitas, outras largas.
-float beamWidth(float i) {
-  return 0.16 + 0.3 * hash(i * 1.37 + 4.0);
-}
-
-// Brilho da coluna i na altura y (0 = base, 1 = topo).
-float beam(float i, float y) {
-  // Maioria escura, poucas colunas bem claras (como no React Bits).
-  float base = 0.12 + 0.88 * pow(hash(i * 3.7 + 1.3), 1.25);
-  float breathe = 0.78 + 0.22 * sin(uTime * (0.35 + 0.4 * hash(i * 5.1)) + i * 2.4);
-
-  // Gradiente vertical suave; frequencia, fase e sentido proprios por coluna.
-  float f = 0.45 + 0.5 * hash(i * 9.3 + 2.0);
-  float dir = hash(i * 7.7 + 0.5) > 0.5 ? 1.0 : -1.0;
-  float ph = hash(i * 2.9 + 6.0) + dir * uTime * 0.04;
-  float g = 0.5 + 0.5 * sin(TAU * (y * f + ph));
-  g = g * g * (3.0 - 2.0 * g);
-
-  return base * breathe * mix(0.3, 1.0, g);
-}
-
-void main() {
-  vec2 uv = gl_FragCoord.xy / uRes;
-  float aspect = uRes.x / uRes.y;
-  vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
-
-  // A vinheta fica presa a viewport: so as colunas acompanham a paralaxe.
-  float r = length(p * vec2(0.75, 0.55));
-
-  // Rotacao (0 = colunas verticais).
-  float ca = cos(uAngle);
-  float sa = sin(uAngle);
-  vec2 q = vec2(p.x * ca + p.y * sa, p.y * ca - p.x * sa);
-
-  // Largura visivel em unidades de coluna: telas estreitas mostram menos colunas.
-  float viewW = clamp(aspect, 0.6, 1.8) * 1.25;
-  float x = q.x * (viewW / aspect) + uPointer.x * 0.05 + 1.7;
-  float y = q.y + 0.5 + uScroll * 0.15 + uPointer.y * 0.02;
-
-  // Periodo = soma das larguras; a coluna do pixel e achada pelas bordas acumuladas.
-  float period = 0.0;
-  for (int k = 0; k < BEAMS; k++) period += beamWidth(float(k));
-  float xw = mod(x, period);
-
-  float x0 = 0.0;
-  float w = 0.0;
-  float idx = 0.0;
-  float acc = 0.0;
-  for (int k = 0; k < BEAMS; k++) {
-    float wk = beamWidth(float(k));
-    if (xw >= acc && xw < acc + wk) {
-      idx = float(k);
-      x0 = acc;
-      w = wk;
-    }
-    acc += wk;
-  }
-
-  // Borda nitida, so com anti-alias: mistura 50/50 com a vizinha exatamente na emenda.
-  float dl = xw - x0;
-  float dr = x0 + w - xw;
-  float prev = mod(idx + NBEAMS - 1.0, NBEAMS);
-  float next = mod(idx + 1.0, NBEAMS);
-  float v = beam(idx, y);
-  v = mix(v, beam(prev, y), 0.5 * (1.0 - smoothstep(0.0, EDGE, dl)));
-  v = mix(v, beam(next, y), 0.5 * (1.0 - smoothstep(0.0, EDGE, dr)));
-
-  // Leve luz lateral dentro de cada coluna.
-  float u = dl / w;
-  float lit = hash(idx * 4.1 + 0.3) > 0.5 ? u : 1.0 - u;
-  v *= 0.86 + 0.14 * lit;
-
-  // Vinheta: o brilho concentra no centro e morre nas bordas.
-  v *= smoothstep(1.7, 0.35, r);
-
-  // Grao de filme (~8 quadros/s), mais visivel dentro das colunas.
-  float n = hash2(gl_FragCoord.xy + floor(uTime * 8.0) * 17.0);
-  v *= 1.0 + (n - 0.5) * uGrain * (0.4 + v);
-
-  // Efeito terno: colunas pares em vermelho discreto, impares em branco ainda
-  // mais discreto (NBEAMS e par, entao a alternancia fecha no loop).
-  float isRed = 1.0 - mod(idx, 2.0);
-  float gain = mix(WHITE_GAIN, RED_GAIN, isRed);
-  vec3 tint = mix(uColor, uAccent, isRed);
-  float a = clamp(v * uIntensity * gain, 0.0, 1.0);
-
-  // Saida pre-multiplicada (contexto criado com premultipliedAlpha).
-  gl_FragColor = vec4(tint * a, a);
-}`;
 
 // Degraus de qualidade aplicados sobre o DPR base.
 const QUALITY_STEPS = [1, 0.8, 0.65, 0.5];
@@ -184,15 +77,78 @@ const ACTIVE_HOLD_MS = 160;
 // Constantes de tempo (s) da rampa de velocidade: sobe rapido, desce um pouco mais devagar.
 const ATTACK_S = 0.18;
 const RELEASE_S = 0.35;
+// Com o hero visivel e sem interacao, a cena redesenha a ~30 quadros/s.
+const AMBIENT_FRAME_MS = 33;
+// Folga (em alturas da viewport) entre o no do circuito e a borda do cartao.
+const NODE_GAP = 0.028;
+// Textura da logo: largura em px (a altura segue a proporcao da logo).
+const LOGO_TEX_WIDTH = 1024;
+
+const EMPTY_PIXEL = new Uint8Array([0, 0, 0, 0]);
+
+// A logo e rasterizada uma unica vez e reaproveitada se o contexto WebGL for recriado.
+let logoCanvas: Promise<HTMLCanvasElement | null> | null = null;
+
+function loadLogoCanvas() {
+  logoCanvas ??= new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = LOGO_TEX_WIDTH;
+      canvas.height = Math.round(LOGO_TEX_WIDTH / LOGO_ASPECT);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return resolve(null);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas);
+    };
+    img.onerror = () => resolve(null);
+    img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(buildLogoSvg())}`;
+  });
+  return logoCanvas;
+}
+
+/** Le a posicao dos elementos-ancora e converte para unidades de cena (altura = 1). */
+function readAnchors(): Anchors | null {
+  const H = window.innerHeight || 1;
+  const W = window.innerWidth || 1;
+  const sy = window.scrollY;
+
+  const rectOf = (key: string) => {
+    const el = document.querySelector<HTMLElement>(`[data-scene-anchor="${key}"]`);
+    const r = el?.getBoundingClientRect();
+    return r && r.width > 0 && r.height > 0 ? r : null;
+  };
+  const toScene = (x: number, y: number): [number, number] => [(x - W / 2) / H, (H / 2 - (y + sy)) / H];
+
+  const logo = rectOf("logo");
+  const end = rectOf("hero-end");
+  if (!logo || !end) return null;
+
+  const hh = Math.min(logo.height / 2, logo.width / 2 / LOGO_ASPECT) / H;
+  const [lx, ly] = toScene(logo.left + logo.width / 2, logo.top + logo.height / 2);
+
+  const cardRects = [0, 1, 2].map((i) => rectOf(`card-${i}`));
+  // Os circuitos so existem com os cartoes ao lado da logo (nao empilhados abaixo dela).
+  const cardsOn = cardRects.every((r) => r && r.right < logo.left && r.top < logo.bottom);
+  const cards = cardRects.map((r) => (r ? toScene(r.right + NODE_GAP * H, r.top + r.height / 2) : ([0, 0] as [number, number])));
+
+  return {
+    logo: [lx, ly, hh * LOGO_ASPECT, hh],
+    cards,
+    cardsOn,
+    bottom: end.bottom + sy + 0.35 * H,
+  };
+}
 
 export default function BeamsCanvas({
-  color = [0.94, 0.92, 0.89],
-  accent = [0.5, 0.1, 0.09],
+  color = [0.16, 0.16, 0.16],
+  accent = [0.0, 0.0, 0.0],
   angle = 0,
-  intensity = 0.85,
+  intensity = 0.3,
   grain = 0,
   speed = 10,
   idleSpeed = 0,
+  hero = false,
   onReady,
   className,
 }: BeamsCanvasProps) {
@@ -201,8 +157,8 @@ export default function BeamsCanvas({
   const [epoch, setEpoch] = useState(0);
 
   // Props "vivas": alterar cor/velocidade nao recria o contexto WebGL.
-  const propsRef = useRef({ color, accent, angle, intensity, grain, speed, idleSpeed, onReady });
-  propsRef.current = { color, accent, angle, intensity, grain, speed, idleSpeed, onReady };
+  const propsRef = useRef({ color, accent, angle, intensity, grain, speed, idleSpeed, hero, onReady });
+  propsRef.current = { color, accent, angle, intensity, grain, speed, idleSpeed, hero, onReady };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -226,6 +182,16 @@ export default function BeamsCanvas({
     gl.canvas.style.cssText = "display:block;width:100%;height:100%";
     container.appendChild(gl.canvas);
 
+    // Textura da logo (premultiplicada, sem mipmaps): comeca vazia e recebe a imagem
+    // quando a rasterizacao termina.
+    const logoTexture = new Texture(gl, {
+      image: EMPTY_PIXEL,
+      width: 1,
+      height: 1,
+      generateMipmaps: false,
+      premultiplyAlpha: true,
+    });
+
     const initial = propsRef.current;
     const program = new Program(gl, {
       vertex,
@@ -234,14 +200,24 @@ export default function BeamsCanvas({
       depthWrite: false,
       uniforms: {
         uTime: { value: START_TIME },
+        uClock: { value: 0 },
         uRes: { value: [1, 1] },
         uColor: { value: initial.color },
         uAccent: { value: initial.accent },
         uPointer: { value: [0, 0] },
         uScroll: { value: 0 },
+        uScrollY: { value: 0 },
         uAngle: { value: initial.angle },
         uIntensity: { value: initial.intensity },
         uGrain: { value: initial.grain },
+        uHero: { value: 0 },
+        uLogoTex: { value: logoTexture },
+        uLogoReady: { value: 0 },
+        uLogo: { value: [0, 0, 0.2, 0.25] },
+        uCard0: { value: [0, 0] },
+        uCard1: { value: [0, 0] },
+        uCard2: { value: [0, 0] },
+        uCardsOn: { value: 0 },
       },
     });
     const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
@@ -250,11 +226,19 @@ export default function BeamsCanvas({
     const baseDpr = Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.25 : 1.5);
     let qualityStep = 0;
     let time = START_TIME;
+    let clock = 0;
     let ready = false;
+    let disposed = false;
+    let anchors: Anchors | null = null;
 
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
     let scroll = 0;
     let scrollTarget = 0;
+
+    // Ancoras = posicao dos elementos HTML a que a arte do hero se prende.
+    function refreshAnchors() {
+      anchors = propsRef.current.hero ? readAnchors() : null;
+    }
 
     function resize() {
       const w = container!.clientWidth;
@@ -263,18 +247,35 @@ export default function BeamsCanvas({
       renderer.dpr = baseDpr * QUALITY_STEPS[qualityStep];
       renderer.setSize(w, h);
       program.uniforms.uRes.value = [gl.canvas.width, gl.canvas.height];
+      refreshAnchors();
     }
 
     function draw() {
       const p = propsRef.current;
-      program.uniforms.uTime.value = time;
-      program.uniforms.uColor.value = p.color;
-      program.uniforms.uAccent.value = p.accent;
-      program.uniforms.uAngle.value = p.angle;
-      program.uniforms.uIntensity.value = p.intensity;
-      program.uniforms.uGrain.value = p.grain;
-      program.uniforms.uPointer.value = [pointer.x, pointer.y];
-      program.uniforms.uScroll.value = scroll;
+      const u = program.uniforms;
+      u.uTime.value = time;
+      u.uClock.value = clock;
+      u.uColor.value = p.color;
+      u.uAccent.value = p.accent;
+      u.uAngle.value = p.angle;
+      u.uIntensity.value = p.intensity;
+      u.uGrain.value = p.grain;
+      u.uPointer.value = [pointer.x, pointer.y];
+      u.uScroll.value = scroll;
+
+      // A arte do hero e presa ao documento: usa o scroll bruto, sem suavizar.
+      u.uScrollY.value = window.scrollY / (window.innerHeight || 1);
+      if (anchors) {
+        u.uHero.value = 1;
+        u.uLogo.value = anchors.logo;
+        u.uCard0.value = anchors.cards[0];
+        u.uCard1.value = anchors.cards[1];
+        u.uCard2.value = anchors.cards[2];
+        u.uCardsOn.value = anchors.cardsOn ? 1 : 0;
+      } else {
+        u.uHero.value = 0;
+      }
+
       renderer.render({ scene: mesh });
       if (!ready) {
         ready = true;
@@ -282,7 +283,31 @@ export default function BeamsCanvas({
       }
     }
 
-    // --- Movimento reduzido: um frame estatico, redesenhado so no resize. ---
+    // Logo pronta: sobe a textura e redesenha (mesmo com o loop parado).
+    let redraw = () => draw();
+    loadLogoCanvas().then((canvas) => {
+      if (disposed || !canvas) return;
+      logoTexture.image = canvas;
+      logoTexture.needsUpdate = true;
+      program.uniforms.uLogoReady.value = 1;
+      redraw();
+    });
+
+    // Ancoras: mudam com o layout (resize, fontes, quebra de texto), nao com o scroll.
+    const anchorEls = () => Array.from(document.querySelectorAll("[data-scene-anchor]"));
+    const anchorObserver = new ResizeObserver(() => {
+      refreshAnchors();
+      redraw();
+    });
+    anchorEls().forEach((el) => anchorObserver.observe(el));
+    const onWindowResize = () => {
+      refreshAnchors();
+      redraw();
+    };
+    window.addEventListener("resize", onWindowResize);
+    document.fonts?.ready.then(onWindowResize);
+
+    // --- Movimento reduzido: frame estatico, redesenhado no resize e no scroll. ---
     if (shouldReduceMotion) {
       resize();
       draw();
@@ -291,17 +316,34 @@ export default function BeamsCanvas({
         draw();
       });
       ro.observe(container);
+
+      let pending = false;
+      const onStaticScroll = () => {
+        if (pending) return;
+        pending = true;
+        requestAnimationFrame(() => {
+          pending = false;
+          draw();
+        });
+      };
+      window.addEventListener("scroll", onStaticScroll, { passive: true });
+
       return () => {
+        disposed = true;
         ro.disconnect();
+        anchorObserver.disconnect();
+        window.removeEventListener("resize", onWindowResize);
+        window.removeEventListener("scroll", onStaticScroll);
         gl.getExtension("WEBGL_lose_context")?.loseContext();
         if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
       };
     }
 
-    // --- Loop animado: so roda enquanto ha interacao (ou a rampa ainda assenta). ---
+    // --- Loop animado: roda com interacao, com o hero visivel ou enquanto a rampa assenta. ---
     let frameId = 0;
     let running = false;
     let last = 0;
+    let lastDraw = 0;
     let frames = 0;
     let slowFrames = 0;
     let activeUntil = 0;
@@ -309,6 +351,7 @@ export default function BeamsCanvas({
 
     function tick(now: number) {
       frameId = requestAnimationFrame(tick);
+
       const dt = Math.min((now - last) / 1000, 0.05);
       const frameMs = now - last;
       last = now;
@@ -320,17 +363,24 @@ export default function BeamsCanvas({
       speedCur += (target - speedCur) * (1 - Math.exp(-dt / (target > speedCur ? ATTACK_S : RELEASE_S)));
 
       time += dt * speedCur * SPEED_TO_TIME;
+      clock += dt;
       pointer.x += (pointer.tx - pointer.x) * 0.06;
       pointer.y += (pointer.ty - pointer.y) * 0.06;
       scroll += (scrollTarget - scroll) * 0.1;
-      draw();
 
-      // Em repouso nao ha nada a animar: o loop para e a GPU descansa.
+      // Hero na tela: a cena segue viva, mas sem interacao basta ~30 quadros/s.
+      const ambient = anchors !== null && window.scrollY < anchors.bottom;
+      if (active || !ambient || now - lastDraw >= AMBIENT_FRAME_MS) {
+        lastDraw = now;
+        draw();
+      }
+
+      // Em repouso, fora do hero, nao ha nada a animar: o loop para e a GPU descansa.
       const settled =
         Math.abs(pointer.tx - pointer.x) < 5e-4 &&
         Math.abs(pointer.ty - pointer.y) < 5e-4 &&
         Math.abs(scrollTarget - scroll) < 5e-4;
-      if (!active && p.idleSpeed === 0 && speedCur < 0.01 && settled) {
+      if (!active && !ambient && p.idleSpeed === 0 && speedCur < 0.01 && settled) {
         stop();
         return;
       }
@@ -370,6 +420,9 @@ export default function BeamsCanvas({
     document.addEventListener("visibilitychange", onVisibility);
 
     // Parado, o canvas limpo pelo resize precisa de um redesenho imediato.
+    redraw = () => {
+      if (!running) draw();
+    };
     const ro = new ResizeObserver(() => {
       resize();
       if (!running) draw();
@@ -415,10 +468,13 @@ export default function BeamsCanvas({
     resize();
 
     return () => {
+      disposed = true;
       stop();
       io.disconnect();
       ro.disconnect();
+      anchorObserver.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("resize", onWindowResize);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("wheel", poke);

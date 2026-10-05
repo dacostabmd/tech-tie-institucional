@@ -1,0 +1,103 @@
+{
+  "Metadata": {
+    "title": "TechTie | Dashboards de BI, CRM, automatización e IA para tu negocio",
+    "description": "TechTie desarrolla soluciones tecnológicas a medida: dashboards de Business Intelligence, CRM, automatizaciones e integraciones, inteligencia artificial, enriquecimiento de datos, sitios institucionales y landing pages.",
+    "keywords": "dashboards de bi, business intelligence, crm, automatización de procesos, integraciones, inteligencia artificial, enriquecimiento de datos, desarrollo de sitios web, landing pages, desarrollo de software",
+    "ogDescription": "Dashboards de inteligencia, CRM, automatizaciones, IA y enriquecimiento de datos en soluciones a medida para tu negocio. De la estrategia a la entrega, con tecnología real.",
+    "ogImageAlt": "TechTie - Soluciones tecnológicas: dashboards, CRM, automatización e IA",
+    "twitterDescription": "Dashboards de BI, CRM, automatizaciones, IA y enriquecimiento de datos: soluciones tecnológicas a medida para tu negocio.",
+    "organizationDescription": "Empresa de soluciones tecnológicas: dashboards de Business Intelligence, CRM, automatizaciones, inteligencia artificial, enriquecimiento de datos, sitios institucionales y landing pages.",
+    "applicationDescription": "Soluciones tecnológicas a medida — dashboards de Business Intelligence, CRM, automatizaciones e integraciones, inteligencia artificial y enriquecimiento de datos — para empresas de cualquier sector."
+  },
+  "Navbar": {
+    "home": "Inicio",
+    "produtos": "Productos",
+    "servicos": "Servicios",
+    "contato": "Contacto",
+    "sobre": "Sobre TechTie",
+    "logoAriaLabel": "TechTie, volver al inicio",
+    "ctaLong": "Habla con un especialista",
+    "ctaShort": "Hablar ahora",
+    "openMenu": "Abrir menú"
+  },
+  "Hero": {
+    "eyebrow": "Tecnología a medida para tu negocio",
+    "titleLine1": "Tecnología aplicada:",
+    "titleLine2": "El camino hacia la prosperidad digital",
+    "paragraph": "<brand>TECHTIE</brand> convierte datos y procesos en resultados reales, con dashboards, automatizaciones e inteligencia artificial a medida para tu negocio. Crece con eficiencia y genera valor duradero.",
+    "cardCrm": "CRM",
+    "cardDataEnrich": "Enriquecimiento de datos",
+    "cardLawsuits": "Sitios web y landing pages",
+    "cardOperations": "Soluciones de gestión operativa",
+    "cardDashboards": "Paneles de inteligencia (BI)",
+    "cardAutomation": "Automatizaciones e integraciones con IA"
+  },
+  "HowItWorks": {
+    "heading": "Tres frentes en una sola operación",
+    "intro": "Automatización para organizar la operación, Business Intelligence para visualizarla e inteligencia artificial para acelerarla, integradas desde la base, no añadidas con herramientas sueltas.",
+    "pillarCrmLabel": "CRM y automatización",
+    "pillarCrmTagline": "Organiza la operación de tu negocio.",
+    "pillarBiLabel": "Business Intelligence",
+    "pillarBiTagline": "Visualiza los números que importan.",
+    "pillarIaLabel": "Inteligencia artificial",
+    "pillarIaTagline": "Acelera el trabajo del equipo.",
+    "itemClientsTitle": "CRM a medida",
+    "itemClientsDescription": "Clientes, embudo comercial, plazos y tareas en un solo lugar, con historial completo de relación, responsables por cuenta y automatización de notificaciones, adaptado al proceso de tu negocio.",
+    "itemLawsuitsTitle": "Automatizaciones e integraciones",
+    "itemLawsuitsDescription": "Flujos automatizados entre sistemas, WhatsApp, formularios y hojas de cálculo, con integraciones vía API para eliminar tareas manuales y repetitivas de la operación.",
+    "itemBiTitle": "Dashboards de Business Intelligence",
+    "itemBiDescription": "Paneles a medida sobre ventas, operación, productividad y riesgo, sin exportar hojas de cálculo ni depender de herramientas externas. Decisiones basadas en los datos del propio negocio.",
+    "itemIndicatorsTitle": "Indicadores de gestión",
+    "itemIndicatorsDescription": "Volumen por área, canal y etapa, concentración de riesgo y carga por responsable, para orientar equipo, prioridades e inversión.",
+    "itemRiskTitle": "Clasificación y resúmenes por IA",
+    "itemRiskDescription": "Cada evento se clasifica automáticamente -urgente, positivo o rutinario- y se resume en lenguaje claro, priorizando la cola de trabajo del equipo.",
+    "itemAssistantTitle": "Asistente de IA conversacional",
+    "itemAssistantDescription": "IA entrenada en el contexto de tu negocio: consulta datos, solicita resúmenes y encuentra información en lenguaje natural, directo en tu sistema."
+  },
+  "About": {
+    "eyebrow": "Sobre TechTie",
+    "heading": "Tecnología nacida de la práctica, para cualquier negocio",
+    "paragraph1": "TechTie nació de la experiencia del Dr. Bruno Durão, socio de BMD Dap Advocacia, uno de los mayores despachos del país, al enfrentar en la práctica el mismo problema que frena a la mayoría de las empresas: información dispersa entre hojas de cálculo, sistemas que no se comunican entre sí y procesos manuales que consumen el tiempo del equipo. La solución creada para resolverlo se convirtió en producto, y hoy TechTie lleva esa misma tecnología a negocios de cualquier sector.",
+    "paragraph2": "Desarrollamos dashboards de Business Intelligence, CRM, automatizaciones e integraciones, inteligencia artificial, enriquecimiento de datos y también sitios institucionales y landing pages, siempre a medida, para dar a los gestores una visión clara de la operación y decisiones basadas en datos, no en hojas de cálculo desactualizadas."
+  },
+  "LeadSection": {
+    "heading": "Agenda una consulta gratuita",
+    "paragraph": "Conoce las soluciones de TechTie: dashboards de BI, CRM, automatizaciones, IA y enriquecimiento de datos a medida para tu negocio. Deja tus datos y un especialista se pondrá en contacto para entender tu operación.",
+    "disclaimer": "Tus datos se usan solo para contacto comercial y nunca se comparten con terceros.",
+    "formHeading": "Empieza a gestionar tu negocio con inteligencia",
+    "formSubheading": "Regístrate y habla con nuestro equipo."
+  },
+  "LeadForm": {
+    "nameLabel": "Nombre completo",
+    "namePlaceholder": "Tu nombre",
+    "emailLabel": "Correo profesional",
+    "emailPlaceholder": "tu@empresa.com",
+    "oabLabel": "Empresa (opcional)",
+    "oabPlaceholder": "Nombre de tu empresa",
+    "submit": "Hablar con un especialista",
+    "submitting": "Enviando...",
+    "successTitle": "Registro recibido",
+    "successMessage": "Hemos recibido tus datos. Nuestro equipo se pondrá en contacto pronto para presentarte las soluciones de TechTie.",
+    "errorMissingFields": "Completa nombre y correo electrónico para continuar.",
+    "errorInvalidEmail": "Introduce un correo electrónico válido."
+  },
+  "Footer": {
+    "description": "Soluciones tecnológicas a medida: dashboards de Business Intelligence, CRM, automatizaciones e integraciones, inteligencia artificial y enriquecimiento de datos para tu negocio.",
+    "institutionalHeading": "Institucional",
+    "linkAbout": "Sobre TechTie",
+    "linkPrivacy": "Política de privacidad",
+    "linkTerms": "Términos de uso",
+    "contactHeading": "Contacto",
+    "copyright": "© {year} TechTie. Todos los derechos reservados. Identificación fiscal {cnpj} (provisional).",
+    "legalDisclaimer": "Los resultados pueden variar según la operación y los datos de cada negocio."
+  },
+  "WhatsappFloat": {
+    "ariaLabel": "Hablar por WhatsApp (número provisional)"
+  },
+  "LanguageSwitcher": {
+    "ariaLabel": "Seleccionar idioma",
+    "pt-BR": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}

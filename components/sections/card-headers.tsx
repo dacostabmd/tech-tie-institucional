@@ -89,12 +89,12 @@ function Counter({ target }: { target: number }) {
 export function HeaderGestao() {
   return (
     <Hd>
-      <Label title="CRM jurídico">
+      <Label title="CRM">
         <span className="hd-rw hd-sub" aria-hidden="true">
           <span>clientes</span>
           <span style={delay(2)}>prazos</span>
           <span style={delay(4)}>tarefas</span>
-          <span style={delay(6)}>processos</span>
+          <span style={delay(6)}>negócios</span>
         </span>
       </Label>
       <div className="hd-stage" aria-hidden="true">
@@ -114,23 +114,23 @@ export function HeaderGestao() {
   );
 }
 
-/** CRM · busca por CNJ acendendo tribunais + ponto "ao vivo". */
+/** Automação · evento disparando integrações + ponto "ao vivo". */
 export function HeaderTribunais() {
   return (
     <Hd>
-      <Label title="CRM jurídico">
+      <Label title="Automação">
         <span className="hd-dot" aria-hidden="true" />
-        <span className="hd-sub">27 tribunais</span>
+        <span className="hd-sub">integrações ativas</span>
       </Label>
       <div className="hd-stage hd-flex" aria-hidden="true">
         <div className="hd-cnj">
-          <span>0001234-56</span>
+          <span>novo lead</span>
         </div>
         <div className="hd-chips">
-          <span>TJSP</span>
-          <span style={delay(0.25)}>TRF3</span>
-          <span style={delay(0.5)}>TRT2</span>
-          <span style={delay(0.75)}>STJ</span>
+          <span>CRM</span>
+          <span style={delay(0.25)}>WhatsApp</span>
+          <span style={delay(0.5)}>E-mail</span>
+          <span style={delay(0.75)}>API</span>
         </div>
       </div>
     </Hd>
@@ -151,7 +151,7 @@ export function HeaderBi() {
     <Hd>
       <Label title="BI">
         <span className="hd-sub" aria-hidden="true">
-          <Counter target={1248} /> processos
+          <Counter target={1248} /> registros
         </span>
       </Label>
       <div className="hd-stage" aria-hidden="true">
@@ -204,8 +204,8 @@ export function HeaderIndicadores() {
         <span className="hd-seg" aria-hidden="true">
           <i />
           <span>área</span>
-          <span>tribunal</span>
-          <span>fase</span>
+          <span>canal</span>
+          <span>etapa</span>
         </span>
       </Label>
       <div className="hd-stage hd-flex hd-gap" aria-hidden="true">
@@ -245,19 +245,19 @@ export function HeaderRisco() {
       <div className="hd-stage hd-rows" aria-hidden="true">
         <i className="hd-scan" />
         <div className="hd-row">
-          <span>Penhora</span>
+          <span>Cliente em risco</span>
           <b className="hd-tag hd-tag--u" style={delay(0.5)}>
             urgente
           </b>
         </div>
         <div className="hd-row">
-          <span>Sentença favorável</span>
+          <span>Negócio fechado</span>
           <b className="hd-tag hd-tag--p" style={delay(0.9)}>
             positiva
           </b>
         </div>
         <div className="hd-row">
-          <span>Juntada de petição</span>
+          <span>Atualização de status</span>
           <b className="hd-tag hd-tag--r" style={delay(1.4)}>
             rotineira
           </b>
@@ -273,13 +273,13 @@ export function HeaderChat() {
     <Hd>
       <Label title="IA">
         <span className="hd-sub" aria-hidden="true">
-          pergunte à carteira
+          pergunte aos dados
           <i className="hd-caret" />
         </span>
       </Label>
       <div className="hd-stage hd-flex hd-chat" aria-hidden="true">
         <div className="hd-ub">
-          <span className="hd-ut">Prazos desta semana?</span>
+          <span className="hd-ut">Vendas desta semana?</span>
         </div>
         <div className="hd-ab">
           <div className="hd-dts">
@@ -287,7 +287,7 @@ export function HeaderChat() {
             <i />
             <i />
           </div>
-          <div className="hd-rp">3 prazos vencem até sexta</div>
+          <div className="hd-rp">12 negócios fechados</div>
         </div>
       </div>
     </Hd>

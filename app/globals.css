@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-inter);
-  --font-heading: var(--font-inter);
+  --font-sans: var(--font-manrope), var(--font-liter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-manrope), var(--font-liter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-manrope), var(--font-liter), ui-sans-serif, system-ui, sans-serif;
 
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -33,22 +33,6 @@
   --color-gold-muted: var(--gold-muted);
   --color-gold-soft: var(--gold-soft);
 
-  /* Identidade formal (/formal): tokens definidos no escopo .theme-formal */
-  --font-display: var(--font-cormorant);
-  --color-navy: var(--f-navy);
-  --color-navy-deep: var(--f-navy-deep);
-  --color-navy-soft: var(--f-navy-soft);
-  --color-ivory: var(--f-ivory);
-  --color-paper: var(--f-paper);
-  --color-ink: var(--f-ink);
-  --color-ink-muted: var(--f-ink-muted);
-  --color-brass: var(--f-brass);
-  --color-brass-deep: var(--f-brass-deep);
-  --color-rule: var(--f-rule);
-  --color-risk-urgent: var(--f-risk-urgent);
-  --color-risk-positive: var(--f-risk-positive);
-  --color-risk-routine: var(--f-risk-routine);
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -57,7 +41,7 @@
 
 :root {
   /* Base: Dark Mode First e unico. Grafite/carvao profundo, nunca preto puro. */
-  --background: oklch(0.16 0.004 25);
+  --background: oklch(0.14 0 0);
   --foreground: oklch(0.96 0.004 90);
 
   --card: oklch(0.2 0.005 25);
@@ -82,55 +66,22 @@
 
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.78 0.1 24 / 50%);
+  --ring: oklch(0.8 0.12 85 / 50%);
 
-  /* Acento unico Sangria (base #5E1816). --gold preenche botoes (passo mais vivo
-     para destacar do fundo sangria); --gold-soft e o tom claro para texto, icones
-     e bordas sobre fundo escuro (AA). */
-  --gold: oklch(0.45 0.145 27);
-  --gold-soft: oklch(0.78 0.1 24);
-  --gold-foreground: oklch(0.97 0.004 90);
-  --gold-muted: oklch(0.78 0.1 24 / 14%);
+  /* Acento unico Ouro (goldenrod escuro). --gold preenche botoes (texto claro por cima, AA);
+     --gold-soft e o tom claro para texto, icones e bordas sobre fundo escuro. */
+  --gold: oklch(0.65 0.13 82);
+  --gold-soft: oklch(0.74 0.11 83);
+  --gold-foreground: oklch(0.14 0.015 70);
+  --gold-muted: oklch(0.65 0.13 82 / 14%);
 
   --radius: 0.75rem;
-}
-
-/*
- * Identidade formal: marinho institucional + marfim (papel timbrado) + latao.
- * Faixas marinho (hero, prova, CTA final) alternam com corpo em marfim para
- * dar ritmo e conduzir o olhar ate os CTAs.
- */
-/* Tokens no :root para tambem valerem em portais/overlays. */
-:root {
-  --f-navy: oklch(0.23 0.05 262);
-  --f-navy-deep: oklch(0.18 0.04 262);
-  --f-navy-soft: oklch(0.3 0.05 262);
-  --f-ivory: oklch(0.977 0.008 85);
-  --f-paper: oklch(0.952 0.013 85);
-  --f-ink: oklch(0.24 0.04 262);
-  --f-ink-muted: oklch(0.45 0.025 262);
-  /* Latao claro para fundos marinho; latao escuro para texto sobre marfim (AA). */
-  --f-brass: oklch(0.79 0.095 80);
-  --f-brass-deep: oklch(0.5 0.085 70);
-  --f-rule: oklch(0.24 0.04 262 / 12%);
-  --f-risk-urgent: oklch(0.55 0.17 28);
-  --f-risk-positive: oklch(0.52 0.1 160);
-  --f-risk-routine: oklch(0.58 0.02 262);
-}
-
-.theme-formal {
-  background: var(--f-ivory);
-  color: var(--f-ink);
-}
-
-.theme-formal ::selection {
-  background: oklch(0.79 0.095 80 / 35%);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-manrope), var(--font-liter), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -145,7 +96,7 @@ body {
   h1,
   h2,
   h3 {
-    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-manrope), var(--font-liter), ui-sans-serif, system-ui, sans-serif;
     letter-spacing: -0.02em;
     font-weight: 600;
   }
@@ -177,48 +128,14 @@ body {
   }
 }
 
-/* Fundo executivo: grafite com iluminacao de estudio vinda do topo. */
+/* Fundo: so tons de preto neutro, com #272727 como luz mais alta no centro. */
 .bg-executive {
-  background-color: #0b0d10;
+  background-color: #000;
   background-image: radial-gradient(
-    circle at 50% 20%,
-    #1e232a 0%,
-    #0d0f12 70%,
-    #07080a 100%
-  );
-}
-
-/*
- * Risca de giz + dobras de tecido: fios de 1px a cada 24px e faixas verticais
- * suaves a cada 160px, ambos com opacidade minima. A mascara concentra o efeito
- * sob a "luz" (topo/centro) e o dissolve nas bordas, preservando o contraste.
- */
-.bg-executive-stripes {
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(238, 232, 220, 0.045) 0,
-      rgba(238, 232, 220, 0.045) 1px,
-      transparent 1px,
-      transparent 24px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      rgba(238, 232, 220, 0.028) 80px,
-      transparent 160px
-    );
-  -webkit-mask-image: radial-gradient(
-    ellipse 95% 85% at 50% 20%,
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 55%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 95% 85% at 50% 20%,
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 55%,
-    transparent 100%
+    circle at 50% 38%,
+    #272727 0%,
+    #141414 62%,
+    #000 100%
   );
 }
 
@@ -272,4 +189,43 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/*
+ * Hero: cartoes de vidro com cantos chanfrados e o botao principal em anel dourado.
+ * O brilho de hover dos cartoes vem de drop-shadow no <li> (clip-path corta box-shadow).
+ */
+.hero-card {
+  --cut: 14px;
+  --cut-shape: polygon(
+    var(--cut) 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%,
+    0 var(--cut)
+  );
+  position: relative;
+  display: block;
+  clip-path: var(--cut-shape);
+  background: linear-gradient(
+    135deg,
+    rgba(246, 220, 138, 0.7),
+    rgba(140, 100, 32, 0.3) 45%,
+    rgba(246, 220, 138, 0.5)
+  );
+  transition: background 0.3s;
+}
+
+.hero-card:hover,
+.hero-card:focus-visible {
+  background: linear-gradient(135deg, #fbe9a6, rgba(200, 150, 50, 0.7) 45%, #f3d57a);
+}
+
+.hero-card-body {
+  position: absolute;
+  inset: 1px;
+  clip-path: var(--cut-shape);
+  background: linear-gradient(135deg, rgba(46, 40, 29, 0.86), rgba(15, 13, 10, 0.92));
+  backdrop-filter: blur(10px);
 }

@@ -3,10 +3,10 @@
 
 export const siteConfig = {
   name: "TechTie",
-  tagline: "CRM jurídico com Business Intelligence e IA para LegalTech",
+  tagline: "Dashboards, CRM, automações e IA sob medida para o seu negócio",
   // PLACEHOLDER: numero de WhatsApp fictício, substituir pelo numero real da operacao comercial.
   whatsappNumber: "5500000000000",
-  whatsappMessage: "Olá, gostaria de saber mais sobre o CRM jurídico da TechTie.",
+  whatsappMessage: "Olá, gostaria de saber mais sobre a plataforma da TechTie.",
   // PLACEHOLDER: e-mail institucional fictício.
   contactEmail: "contato@techtie.com.br",
   // PLACEHOLDER: CNPJ fictício, substituir pelo CNPJ real antes de publicar.

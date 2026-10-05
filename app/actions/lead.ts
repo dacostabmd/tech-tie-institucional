@@ -2,7 +2,7 @@
 
 export type LeadFormState = {
   status: "idle" | "success" | "error";
-  message?: string;
+  reason?: "missing-fields" | "invalid-email";
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -11,39 +11,36 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // INTEGRACAO FUTURA: substituir o console.log abaixo por chamada real a um
 // CRM/servico de automacao (ex.: HubSpot, RD Station, webhook proprio) e
 // adicionar validacao/sanitizacao robusta dos campos antes de enviar.
-// Campos opcionais (oab, whatsapp, cnj, origem) sao enviados apenas por
+// Campos opcionais (company, whatsapp, origem) sao enviados apenas por
 // algumas variantes da landing page.
+//
+// O retorno carrega apenas um status/motivo (sem texto), para que a UI
+// (lead-form.tsx) resolva a mensagem localizada via next-intl.
 export async function submitLeadForm(
   _prevState: LeadFormState,
   formData: FormData,
 ): Promise<LeadFormState> {
   const name = formData.get("name")?.toString().trim();
   const email = formData.get("email")?.toString().trim();
-  const oab = formData.get("oab")?.toString().trim();
+  const company = formData.get("company")?.toString().trim();
   const whatsapp = formData.get("whatsapp")?.toString().trim();
-  const cnj = formData.get("cnj")?.toString().trim();
   const origem = formData.get("origem")?.toString().trim();
 
   if (!name || !email) {
-    return { status: "error", message: "Preencha nome e e-mail para continuar." };
+    return { status: "error", reason: "missing-fields" };
   }
 
   if (!EMAIL_PATTERN.test(email)) {
-    return { status: "error", message: "Informe um e-mail válido." };
+    return { status: "error", reason: "invalid-email" };
   }
 
   console.log("[TechTie] Novo lead recebido (simulado):", {
     name,
     email,
-    oab,
+    company,
     whatsapp,
-    cnj,
     origem,
   });
 
-  return {
-    status: "success",
-    message:
-      "Recebemos seus dados. Nossa equipe entrará em contato em breve para apresentar o CRM jurídico da TechTie.",
-  };
+  return { status: "success" };
 }
