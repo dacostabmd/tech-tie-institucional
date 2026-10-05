@@ -32,8 +32,6 @@ export function IconDefs() {
 const GOLD = "url(#hi-gold)";
 const EDGE = "url(#hi-edge)";
 const LINE = "#f3d57a";
-// Tracos retos (bbox sem largura/altura) nao aceitam degrade: usam cor solida.
-const SOLID = "#e6bb58";
 
 function Frame({ children }: { children: ReactNode }) {
   return (

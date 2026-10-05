@@ -19,6 +19,7 @@ const liter = Liter({
   subsets: ["latin"],
   weight: "400",
   display: "swap",
+  adjustFontFallback: false,
 });
 
 const siteUrl = "https://www.techtie.com.br";
