@@ -21,6 +21,7 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
     { href: "/", label: t("home") },
     { href: "/produtos", label: t("produtos") },
     { href: "/servicos", label: t("servicos") },
+    { href: "/resultados", label: t("resultados") },
     { href: "/contato", label: t("contato") },
     { href: "/sobre", label: t("sobre") },
   ];
@@ -39,7 +40,7 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
             prefetch
             aria-current={active ? "page" : undefined}
             className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
-              active ? "text-gold-foreground" : "text-foreground/80 hover:text-gold-soft"
+              active ? "text-white" : "text-foreground/80 hover:text-gold-soft"
             }`}
           >
             {active && (
@@ -52,7 +53,7 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
                 }
                 className="absolute inset-0 overflow-hidden rounded-full bg-gold"
               >
-                <span className="absolute inset-x-3 top-0.5 h-[2px] rounded-full bg-gold-foreground/70" />
+                <span className="absolute inset-x-3 top-0.5 h-[2px] rounded-full bg-white/70" />
               </motion.span>
             )}
             <span className="relative">{link.label}</span>
@@ -67,11 +68,18 @@ export function Navbar() {
   const t = useTranslations("Navbar");
 
   return (
-    <header className="relative z-20">
+    <header className="fixed inset-x-0 top-0 z-20">
       <div className="mx-auto flex w-full max-w-[96rem] items-center justify-between gap-4 px-6 py-6">
-        <Link href="/" className="flex items-center gap-3" aria-label={t("logoAriaLabel")}>
-          <Image src="/techtie-app-icon.svg" alt="" width={32} height={32} unoptimized priority />
-          <span className="text-xl font-semibold tracking-[0.2em] text-gold-soft">TECHTIE</span>
+        <Link href="/" className="flex items-center" aria-label={t("logoAriaLabel")}>
+          <Image
+            src="/techtie-logo-horizontal-gold.svg"
+            alt="TechTie"
+            width={371.1}
+            height={100}
+            unoptimized
+            priority
+            className="h-10 w-auto"
+          />
         </Link>
 
         <NavPill className="hidden md:flex" layoutId="nav-pill-active-desktop" />

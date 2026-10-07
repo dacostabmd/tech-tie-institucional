@@ -24,10 +24,10 @@ export function Beams({ className, ...props }: BeamsCanvasProps) {
       cancelIdleCallback?: (id: number) => void;
     };
     if (w.requestIdleCallback) {
-      const id = w.requestIdleCallback(() => setMounted(true), { timeout: 1200 });
+      const id = w.requestIdleCallback(() => setMounted(true), { timeout: 200 });
       return () => w.cancelIdleCallback?.(id);
     }
-    const id = window.setTimeout(() => setMounted(true), 300);
+    const id = window.setTimeout(() => setMounted(true), 0);
     return () => window.clearTimeout(id);
   }, []);
 

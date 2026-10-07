@@ -24,14 +24,14 @@ type Pt = [number, number];
 // barramentos com dobras de 45 graus, como uma placa de circuito, que saem da
 // lamina e se perdem para a direita (a logo fica na coluna da direita do hero).
 const RIGHT_TRACES: { pts: Pt[]; seed: number; node?: boolean }[] = [
-  { pts: [[0.6, -0.55], [0.95, -0.55], [1.2, -0.8], [7, -0.8]], seed: 0.1, node: true },
-  { pts: [[0.46, -0.72], [0.72, -0.72], [0.9, -0.9], [1.5, -0.9], [1.75, -1.15], [7.5, -1.15]], seed: 0.55, node: true },
-  { pts: [[0.3, -1.0], [0.5, -1.0], [0.78, -1.28], [5, -1.28]], seed: 0.8, node: true },
-  { pts: [[2.2, -0.8], [2.5, -0.5], [4.6, -0.5]], seed: 0.3 },
+  { pts: [[0.6, -0.55], [0.95, -0.55], [1.2, -0.8], [3.2, -0.8]], seed: 0.1, node: true },
+  { pts: [[0.46, -0.72], [0.72, -0.72], [0.9, -0.9], [1.5, -0.9], [1.75, -1.15], [3.4, -1.15]], seed: 0.55, node: true },
+  { pts: [[0.3, -1.0], [0.5, -1.0], [0.78, -1.28], [2.6, -1.28]], seed: 0.8, node: true },
+  { pts: [[2.2, -0.8], [2.5, -0.5], [3.0, -0.5]], seed: 0.3 },
 ];
 
 // Nos extras (aneis) nas pontas dos ramais.
-const RIGHT_NODES: Pt[] = [[4.6, -0.5]];
+const RIGHT_NODES: Pt[] = [[3.0, -0.5]];
 
 const f = (n: number) => (Number.isInteger(n) ? `${n}.0` : String(n));
 
@@ -80,6 +80,9 @@ uniform vec4 uLogo;
 uniform vec2 uCard0;
 uniform vec2 uCard1;
 uniform vec2 uCard2;
+uniform vec4 uCard0Rect;
+uniform vec4 uCard1Rect;
+uniform vec4 uCard2Rect;
 uniform float uCardsOn;
 
 const int BEAMS = 16;
@@ -184,7 +187,7 @@ void heroArt(inout vec4 art, vec2 q) {
   vec2 lc = uLogo.xy;
   float hw = uLogo.z;
   float hh = uLogo.w;
-  float fadeR = exp(-max(0.0, (q.x - lc.x) / hh - 0.6) * 0.2);
+  float fadeR = exp(-max(0.0, (q.x - lc.x) / hh - 0.6) * 0.75);
 
   // Circuitos da direita (barramentos que saem da lamina).
   if (q.x > lc.x + 0.1 * hh && q.y < lc.y + hh * 0.2 && q.y > lc.y - hh * 1.9) {
@@ -194,6 +197,7 @@ ${rightTraces}${rightNodes}  }
   if (uCardsOn > 0.5 && q.x < lc.x - 0.1 * hh) {
     for (int i = 0; i < 3; i++) {
       vec2 A = i == 0 ? uCard0 : (i == 1 ? uCard1 : uCard2);
+      vec4 R = i == 0 ? uCard0Rect : (i == 1 ? uCard1Rect : uCard2Rect);
       float fy = float(i) - 1.0;
       float sy = -0.5 * fy * 0.9;
       vec2 S = lc + hh * vec2(-(bladeHalf(sy) + 0.14), sy);
@@ -201,13 +205,31 @@ ${rightTraces}${rightNodes}  }
       float xm = min(S.x - 0.02, max(S.x - 0.3 * hh, A.x + 0.04 + dy));
       vec2 P1 = vec2(xm, S.y);
       vec2 P2 = vec2(max(xm - dy, A.x + 0.012), A.y);
+      // Contorno do cartao, partindo do ponto medio da lateral direita (onde a
+      // linha reta chega) e voltando ao mesmo ponto: percorrido em seguida da
+      // linha reta, no mesmo acumulador de arco, para o cometa dar continuidade.
+      vec2 rc = R.xy;
+      float rw = R.z;
+      float rh = R.w;
+      vec2 TR = rc + vec2(rw, rh);
+      vec2 BR = rc + vec2(rw, -rh);
+      vec2 TL = rc + vec2(-rw, rh);
+      vec2 BL = rc + vec2(-rw, -rh);
+      vec2 RM = rc + vec2(rw, 0.0);
+
       vec2 best = vec2(1e3, 0.0);
       float s = 0.0;
       segAcc(best, q, S, P1, s);
       segAcc(best, q, P1, P2, s);
       segAcc(best, q, P2, A, s);
+      segAcc(best, q, RM, TR, s);
+      segAcc(best, q, TR, TL, s);
+      segAcc(best, q, TL, BL, s);
+      segAcc(best, q, BL, BR, s);
+      segAcc(best, q, BR, RM, s);
       vec4 L = lineLight(best, 0.2 + 0.27 * float(i), 1.0);
       over(art, L.rgb, L.a);
+
       vec4 NS = nodeLight(q, S, 0.0095, 0.15 * float(i), 1.0);
       over(art, NS.rgb, NS.a);
       vec4 NA = nodeLight(q, A, 0.0125, 0.31 * float(i) + 0.2, 1.0);

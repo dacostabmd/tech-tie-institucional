@@ -59,6 +59,8 @@ interface Anchors {
   logo: [number, number, number, number];
   /** Pontos onde os circuitos da esquerda terminam (um por cartao). */
   cards: [number, number][];
+  /** Retangulo de cada cartao (centro x, centro y, meia-largura, meia-altura), para contornar a borda. */
+  cardRects: [number, number, number, number][];
   cardsOn: boolean;
   /** Posicao do documento (px) a partir da qual o hero saiu da tela. */
   bottom: number;
@@ -131,10 +133,16 @@ function readAnchors(): Anchors | null {
   // Os circuitos so existem com os cartoes ao lado da logo (nao empilhados abaixo dela).
   const cardsOn = cardRects.every((r) => r && r.right < logo.left && r.top < logo.bottom);
   const cards = cardRects.map((r) => (r ? toScene(r.right + NODE_GAP * H, r.top + r.height / 2) : ([0, 0] as [number, number])));
+  const rects = cardRects.map((r) => {
+    if (!r) return [0, 0, 0, 0] as [number, number, number, number];
+    const [cx, cy] = toScene(r.left + r.width / 2, r.top + r.height / 2);
+    return [cx, cy, (r.width / 2) / H, (r.height / 2) / H] as [number, number, number, number];
+  });
 
   return {
     logo: [lx, ly, hh * LOGO_ASPECT, hh],
     cards,
+    cardRects: rects,
     cardsOn,
     bottom: end.bottom + sy + 0.35 * H,
   };
@@ -217,13 +225,16 @@ export default function BeamsCanvas({
         uCard0: { value: [0, 0] },
         uCard1: { value: [0, 0] },
         uCard2: { value: [0, 0] },
+        uCard0Rect: { value: [0, 0, 0, 0] },
+        uCard1Rect: { value: [0, 0, 0, 0] },
+        uCard2Rect: { value: [0, 0, 0, 0] },
         uCardsOn: { value: 0 },
       },
     });
     const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
 
     const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
-    const baseDpr = Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.25 : 1.5);
+    const baseDpr = Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.5 : 2);
     let qualityStep = 0;
     let time = START_TIME;
     let clock = 0;
@@ -271,6 +282,9 @@ export default function BeamsCanvas({
         u.uCard0.value = anchors.cards[0];
         u.uCard1.value = anchors.cards[1];
         u.uCard2.value = anchors.cards[2];
+        u.uCard0Rect.value = anchors.cardRects[0];
+        u.uCard1Rect.value = anchors.cardRects[1];
+        u.uCard2Rect.value = anchors.cardRects[2];
         u.uCardsOn.value = anchors.cardsOn ? 1 : 0;
       } else {
         u.uHero.value = 0;

@@ -14,6 +14,27 @@ import {
   IconDefs,
   ScalesIcon,
 } from "@/components/sections/hero-icons";
+import { ShinyText } from "@/components/react-bits/shiny-text";
+import RotatingText from "@/components/react-bits/rotating-text";
+
+// Stack citado no Hero via RotatingText. Nomes proprios, sem traducao.
+const STACK = [
+  "N8N",
+  "LangChain",
+  "LangFuse",
+  "PostgreSQL",
+  "Supabase",
+  "Next.js",
+  "React",
+  "Python",
+  "Node.js",
+  "Angular",
+  "Flutter",
+  "React Native",
+  "Firebase",
+  "Bitrix24",
+  "Hostinger",
+];
 
 // Solucoes em duas colunas, abaixo do texto, na coluna da esquerda. A logo fica na
 // coluna da direita; os circuitos do WebGL ligam a logo aos tres cartoes da coluna
@@ -73,9 +94,20 @@ export function Hero() {
           >
             {t.rich("paragraph", {
               brand: (chunks) => (
-                <strong className="font-semibold text-gold-soft">{chunks}</strong>
+                <ShinyText className="font-semibold">{chunks}</ShinyText>
               ),
             })}
+          </motion.p>
+
+          <motion.p
+            {...rise(0.26)}
+            className="mt-4 flex max-w-md flex-wrap items-baseline gap-x-2 text-sm text-foreground/70"
+          >
+            <span>{t("stackLabel")}</span>
+            <RotatingText
+              texts={STACK}
+              className="font-semibold text-gold-warm"
+            />
           </motion.p>
 
           <ul className="mt-8 grid w-full max-w-[34rem] grid-cols-2 gap-3">

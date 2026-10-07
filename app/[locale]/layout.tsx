@@ -125,7 +125,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`dark ${manrope.variable} ${liter.variable} h-full antialiased`}
+      className={`dark ${manrope.variable} ${liter.variable} h-full overflow-x-hidden antialiased`}
     >
       <head>
         <script

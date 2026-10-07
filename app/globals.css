@@ -32,6 +32,7 @@
   --color-gold-foreground: var(--gold-foreground);
   --color-gold-muted: var(--gold-muted);
   --color-gold-soft: var(--gold-soft);
+  --color-gold-warm: var(--gold-warm);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -40,26 +41,28 @@
 }
 
 :root {
-  /* Base: Dark Mode First e unico. Grafite/carvao profundo, nunca preto puro. */
-  --background: oklch(0.14 0 0);
+  /* Base: Dark Mode First e unico. Grafite/carvao profundo, nunca preto puro.
+     Camadas mais separadas que a versao anterior (card e popover mais claros
+     em relacao ao fundo) para reforcar a profundidade "executiva". */
+  --background: oklch(0.12 0 0);
   --foreground: oklch(0.96 0.004 90);
 
-  --card: oklch(0.2 0.005 25);
+  --card: oklch(0.21 0.006 25);
   --card-foreground: oklch(0.96 0.004 90);
 
-  --popover: oklch(0.19 0.005 25);
+  --popover: oklch(0.2 0.006 25);
   --popover-foreground: oklch(0.96 0.004 90);
 
   --primary: oklch(0.96 0.004 90);
   --primary-foreground: oklch(0.16 0.004 25);
 
-  --secondary: oklch(0.25 0.006 25);
+  --secondary: oklch(0.26 0.007 25);
   --secondary-foreground: oklch(0.92 0.004 90);
 
-  --muted: oklch(0.24 0.005 25);
+  --muted: oklch(0.25 0.006 25);
   --muted-foreground: oklch(0.7 0.008 25);
 
-  --accent: oklch(0.27 0.007 25);
+  --accent: oklch(0.28 0.008 25);
   --accent-foreground: oklch(0.96 0.004 90);
 
   --destructive: oklch(0.62 0.21 25);
@@ -69,9 +72,12 @@
   --ring: oklch(0.8 0.12 85 / 50%);
 
   /* Acento unico Ouro (goldenrod escuro). --gold preenche botoes (texto claro por cima, AA);
-     --gold-soft e o tom claro para texto, icones e bordas sobre fundo escuro. */
+     --gold-soft e o tom claro para texto, icones e bordas sobre fundo escuro;
+     --gold-warm e mais quente e saturado, reservado para destaques tipograficos
+     (palavras-chave em titulos, hover de links) sem perder contraste AA. */
   --gold: oklch(0.65 0.13 82);
   --gold-soft: oklch(0.74 0.11 83);
+  --gold-warm: oklch(0.78 0.15 78);
   --gold-foreground: oklch(0.14 0.015 70);
   --gold-muted: oklch(0.65 0.13 82 / 14%);
 
@@ -82,6 +88,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-manrope), var(--font-liter), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
 @layer base {
@@ -91,6 +98,12 @@ body {
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  button:not(:disabled),
+  a,
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
   }
 
   h1,
@@ -105,6 +118,10 @@ body {
 @layer utilities {
   .text-gold {
     color: var(--gold-soft);
+  }
+
+  .text-gold-warm {
+    color: var(--gold-warm);
   }
 
   .bg-gold {

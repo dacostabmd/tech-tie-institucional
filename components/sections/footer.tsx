@@ -10,6 +10,7 @@ export async function Footer() {
 
   const institutionalLinks = [
     { href: "/sobre", label: t("linkAbout") },
+    { href: "/resultados", label: t("linkResults") },
     { href: "#", label: t("linkPrivacy") },
     { href: "#", label: t("linkTerms") },
   ];
