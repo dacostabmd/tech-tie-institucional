@@ -8,7 +8,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <div className="relative isolate flex min-h-full flex-1 flex-col">
       <PageBackground />
       <Navbar />
-      <main className="flex-1 pt-[5.5rem]">{children}</main>
+      <main className="flex-1 pt-[var(--header-h,5.5rem)]">{children}</main>
       <Footer />
       <WhatsappFloat />
     </div>

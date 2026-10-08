@@ -5,8 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { FadeIn, StaggerContainer } from "@/components/layout/fade-in";
 
 // Layout "grade com filtros": pills de categoria acima de um grid de cards
-// (ilustracao + titulo). Reaproveitado em /servicos e /produtos com
-// categorias e itens proprios de cada pagina.
+// (ilustracao + titulo). Usado em /solucoes.
 export interface FilteredGridItem<Category extends string> {
   id: string;
   category: Category;

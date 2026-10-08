@@ -12,9 +12,6 @@ import { FadeIn, StaggerContainer } from "@/components/layout/fade-in";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 
-// Faixas por pilar: cada linha traz o pilar (CRM e automacao, Business
-// Intelligence, IA) a esquerda e dois recursos a direita, cada um com um
-// cabecalho animado.
 const pillars = [
   {
     id: "crm-automacao",
@@ -80,16 +77,19 @@ export function HowItWorks() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section id="como-funciona" className="relative overflow-hidden py-24 sm:py-32">
-      <div className="relative mx-auto max-w-6xl px-6">
-        <FadeIn className="max-w-2xl">
+    <section id="como-funciona" className="relative overflow-hidden py-16 sm:py-24">
+      <div className="relative mx-auto max-w-7xl px-6">
+        <FadeIn className="max-w-3xl">
           <h2 className="font-serif text-3xl font-semibold tracking-tight text-neon-white sm:text-4xl">
             {t("heading")}
           </h2>
-          <p className="mt-4 text-muted-foreground">{t("intro")}</p>
+          <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground">
+            {t("intro")}
+          </p>
         </FadeIn>
 
-        <StaggerContainer className="mt-16 flex flex-col gap-px overflow-hidden rounded-xl border border-border bg-border">
+        {/* Grade Horizontalizada: 3 Colunas dos Pilares lado a lado */}
+        <StaggerContainer className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {pillars.map((pillar) => (
             <motion.div
               key={pillar.id}
@@ -102,32 +102,36 @@ export function HowItWorks() {
                   transition: { duration: shouldReduceMotion ? 0.01 : 0.25 },
                 },
               }}
-              className="grid scroll-mt-8 grid-cols-1 gap-px bg-border sm:grid-cols-2 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)_minmax(0,1fr)]"
+              className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-sm transition-all duration-300 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5"
             >
-              <div className="flex flex-col gap-3 bg-card p-7 sm:col-span-2 lg:col-span-1">
-                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase">
+              {/* Cabecalho do Pilar */}
+              <div className="flex flex-col gap-2 border-b border-border/70 bg-secondary/30 p-6">
+                <span className="text-xs font-semibold tracking-wider text-gold uppercase">
                   {t(pillar.labelKey)}
-                </h3>
-                <p className="font-serif text-lg font-medium text-neon-white">
+                </span>
+                <h3 className="font-serif text-lg font-medium text-neon-white leading-snug">
                   {t(pillar.taglineKey)}
-                </p>
+                </h3>
               </div>
 
-              {pillar.items.map((item) => (
-                <div
-                  key={item.id}
-                  id={item.id}
-                  className="group relative flex scroll-mt-8 flex-col gap-4 bg-card p-7 transition-colors hover:bg-accent/40"
-                >
-                  <item.header />
-                  <h4 className="font-serif text-lg font-medium text-neon-white">
-                    {t(item.titleKey)}
-                  </h4>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {t(item.descriptionKey)}
-                  </p>
-                </div>
-              ))}
+              {/* Recursos do Pilar */}
+              <div className="flex flex-1 flex-col divide-y divide-border/60">
+                {pillar.items.map((item) => (
+                  <div
+                    key={item.id}
+                    id={item.id}
+                    className="group relative flex flex-1 flex-col gap-3 p-6 transition-colors hover:bg-accent/30"
+                  >
+                    <item.header />
+                    <h4 className="mt-4 font-serif text-base font-semibold text-neon-white-sm tracking-tight">
+                      {t(item.titleKey)}
+                    </h4>
+                    <p className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                      {t(item.descriptionKey)}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           ))}
         </StaggerContainer>

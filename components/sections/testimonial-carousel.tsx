@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
@@ -10,19 +11,22 @@ import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 const TESTIMONIALS = [
   {
     quote:
-      "A automação com N8N eliminou boa parte do trabalho manual da nossa operação comercial. Hoje a equipe foca em vender, não em preencher planilha.",
-    name: "Nome do Responsável",
-    role: "Diretor(a) Comercial",
-    company: "Empresa Parceira I — Holding",
-    initials: "EP",
+      "A automação com IA eliminou boa parte do trabalho manual da nossa operação comercial. Hoje a equipe foca em vender, não em preencher planilha.",
+    name: "Felipe Cardoso",
+    role: "CEO",
+    company: "Premium Office Precatórios",
+    initials: "FC",
+    photo: "/felip.png",
   },
   {
     quote:
       "Os dashboards de BI sob medida deram visibilidade que a gente nunca teve: hoje decidimos com dado, não com achismo.",
-    name: "Nome do Responsável",
-    role: "CEO",
-    company: "Empresa Parceira II — Holding",
-    initials: "EP",
+    name: "Handerson Sales",
+    role: "Diretor Financeiro",
+    company: "DAP Advocacia",
+    initials: "HS",
+    photo: "/handerson-sales.png",
+    photoPosition: "50% 20%",
   },
   {
     quote:
@@ -49,10 +53,6 @@ export function TestimonialCarousel() {
 
   return (
     <div className="relative">
-      <span className="absolute top-4 right-4 z-10 rounded-full border border-gold-soft/30 bg-background/70 px-3 py-1 text-[0.65rem] tracking-wide text-gold-soft/80 uppercase backdrop-blur-sm sm:top-6 sm:right-6">
-        {t("testimonialPlaceholderNote")}
-      </span>
-
       <div className="overflow-hidden rounded-2xl border border-border bg-card/70 shadow-2xl shadow-black/40 backdrop-blur-md">
         <AnimatePresence mode="wait" custom={direction} initial={false}>
           <motion.div
@@ -64,10 +64,23 @@ export function TestimonialCarousel() {
             transition={{ duration: shouldReduceMotion ? 0.01 : 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="grid min-h-[22rem] grid-cols-1 sm:min-h-[26rem] sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)]"
           >
-            <div className="flex items-center justify-center bg-gradient-to-br from-gold-muted to-transparent p-10 sm:p-14">
-              <div className="flex aspect-square w-full max-w-[12rem] items-center justify-center rounded-full border border-gold-soft/40 bg-card text-4xl font-semibold text-gold-warm">
-                {current.initials}
-              </div>
+            <div className="flex items-center justify-center bg-gradient-to-br from-gold-muted to-transparent p-6 sm:p-8">
+              {current.photo ? (
+                <div className="relative aspect-square w-full max-w-[18rem] overflow-hidden rounded-full border border-gold-soft/40 bg-card">
+                  <Image
+                    src={current.photo}
+                    alt={current.name}
+                    fill
+                    sizes="18rem"
+                    className="object-cover"
+                    style={{ objectPosition: current.photoPosition ?? "50% 50%" }}
+                  />
+                </div>
+              ) : (
+                <div className="flex aspect-square w-full max-w-[12rem] items-center justify-center rounded-full border border-gold-soft/40 bg-card text-4xl font-semibold text-gold-warm">
+                  {current.initials}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col justify-center gap-6 p-8 sm:p-12">

@@ -11,9 +11,9 @@ import {
   HeaderChat,
 } from "@/components/sections/card-headers";
 
-// Grade de servicos/projetos ilustrativos, a substituir por cases reais.
-// Cada item pertence a um dos 3 pilares (mesmos de "Como funciona" na Home)
-// e reaproveita os cabecalhos animados ja existentes como ilustracao do card.
+// Grade de solucoes ilustrativas, a substituir por cases reais. Cada item
+// pertence a um dos 3 pilares (mesmos de "Como funciona" na Home) e reaproveita
+// os cabecalhos animados ja existentes como ilustracao do card.
 type Pillar = "crm" | "bi" | "ia";
 
 const PROJECTS: Omit<FilteredGridItem<Pillar>, "title">[] = [
@@ -34,8 +34,8 @@ const PROJECT_TITLE_KEYS: Record<string, string> = {
   "ia-2": "projectAssistantTitle",
 };
 
-export function Services() {
-  const t = useTranslations("Services");
+export function Solutions() {
+  const t = useTranslations("Solutions");
 
   return (
     <FilteredGrid

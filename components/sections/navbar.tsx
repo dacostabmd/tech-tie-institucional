@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -19,8 +20,7 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
 
   const links = [
     { href: "/", label: t("home") },
-    { href: "/produtos", label: t("produtos") },
-    { href: "/servicos", label: t("servicos") },
+    { href: "/solucoes", label: t("solucoes") },
     { href: "/resultados", label: t("resultados") },
     { href: "/contato", label: t("contato") },
     { href: "/sobre", label: t("sobre") },
@@ -66,10 +66,28 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
 
 export function Navbar() {
   const t = useTranslations("Navbar");
+  const barRef = useRef<HTMLDivElement>(null);
+
+  // Altura real do header (varia com fonte/zoom/breakpoint): publicada como
+  // variavel CSS para o layout reservar o espaco exato no topo do <main>.
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    const setVar = () => {
+      document.documentElement.style.setProperty("--header-h", `${bar.offsetHeight}px`);
+    };
+    setVar();
+    const ro = new ResizeObserver(setVar);
+    ro.observe(bar);
+    return () => ro.disconnect();
+  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-20">
-      <div className="mx-auto flex w-full max-w-[96rem] items-center justify-between gap-4 px-6 py-6">
+      <div
+        ref={barRef}
+        className="mx-auto flex w-full max-w-[96rem] items-center justify-between gap-4 px-6 py-6"
+      >
         <Link href="/" className="flex items-center" aria-label={t("logoAriaLabel")}>
           <Image
             src="/techtie-logo-horizontal-gold.svg"

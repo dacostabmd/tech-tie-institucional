@@ -1,26 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { FadeIn } from "@/components/layout/fade-in";
 
-// Stack exibido como badges no final da secao. Nomes proprios, sem traducao.
-const STACK = [
-  "N8N",
-  "LangChain",
-  "LangFuse",
-  "Bancos de Dados Relacionais e Não Relacionais",
-  "PostgreSQL",
-  "Supabase",
-  "Hostinger",
-  "Angular",
-  "React",
-  "Next.js",
-  "Node.js",
-  "Python",
-  "Bitrix24",
-  "Flutter",
-  "React Native",
-  "Firebase",
-];
-
 /** Sobre a TechTie: destino do link "Sobre a TechTie" do menu. */
 export async function About() {
   const t = await getTranslations("About");
@@ -37,20 +17,6 @@ export async function About() {
           </h2>
           <p className="mt-4 text-muted-foreground">{t("paragraph1")}</p>
           <p className="mt-4 text-muted-foreground">{t("paragraph2")}</p>
-
-          <p className="mt-10 text-xs font-semibold tracking-[0.18em] text-gold-soft uppercase">
-            {t("stackHeading")}
-          </p>
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {STACK.map((tech) => (
-              <li
-                key={tech}
-                className="rounded-full border border-gold-soft/30 bg-card/60 px-3 py-1 text-xs text-foreground/80"
-              >
-                {tech}
-              </li>
-            ))}
-          </ul>
         </FadeIn>
       </div>
     </section>

@@ -1,36 +1,45 @@
 "use client";
 
 import {
+  type CSSProperties,
+  type ReactNode,
   useEffect,
   useRef,
   useState,
-  type CSSProperties,
-  type ReactNode,
 } from "react";
 
-// Cabecalhos animados dos cards de "Tres pilares". O CSS vive em
-// app/card-headers.css (classes .hd-*); aqui ficam a estrutura e dois
-// comportamentos em JS: pausar fora da viewport e o contador do BI.
-
+// Converte atraso em style inline para escalonar a animacao entre elementos.
 const delay = (s: number): CSSProperties => ({ animationDelay: `${s}s` });
 
-/** Raiz de cada cabecalho: pausa as animacoes CSS quando sai da tela. */
+/**
+ * Envelope do cabecalho do card.
+ *
+ * data-play="false" pausa as animacoes CSS quando o card sai da viewport
+ * (IntersectionObserver com threshold 0.1), poupando GPU/bateria.
+ */
 function Hd({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [play, setPlay] = useState(true);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !("IntersectionObserver" in window)) return;
-    const io = new IntersectionObserver(([entry]) => setPlay(entry.isIntersecting), {
-      threshold: 0.3,
-    });
-    io.observe(el);
-    return () => io.disconnect();
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          setPlay(entry.isIntersecting);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={ref} className="hd" data-play={play}>
+    <div ref={ref} className="hd" data-play={play ? "true" : "false"}>
       {children}
     </div>
   );
@@ -98,7 +107,7 @@ export function HeaderGestao() {
         </span>
       </Label>
       <div className="hd-stage" aria-hidden="true">
-        <svg className="hd-full" viewBox="0 0 190 76" focusable="false">
+        <svg className="hd-full" viewBox="0 0 190 76" preserveAspectRatio="xMidYMid meet" focusable="false">
           <line className="hd-ln" x1="95" y1="38" x2="30" y2="18" style={delay(0.1)} />
           <line className="hd-ln" x1="95" y1="38" x2="160" y2="16" style={delay(0.3)} />
           <line className="hd-ln" x1="95" y1="38" x2="38" y2="60" style={delay(0.5)} />
@@ -155,7 +164,7 @@ export function HeaderBi() {
         </span>
       </Label>
       <div className="hd-stage" aria-hidden="true">
-        <svg className="hd-full" viewBox="0 0 190 76" focusable="false">
+        <svg className="hd-full" viewBox="0 0 190 76" preserveAspectRatio="xMidYMid meet" focusable="false">
           {bars.map((b) => (
             <rect
               key={b.x}
@@ -209,7 +218,7 @@ export function HeaderIndicadores() {
         </span>
       </Label>
       <div className="hd-stage hd-flex hd-gap" aria-hidden="true">
-        <svg width="52" height="52" viewBox="0 0 60 60" focusable="false">
+        <svg width="52" height="52" viewBox="0 0 60 60" preserveAspectRatio="xMidYMid meet" focusable="false">
           <circle cx="30" cy="30" r="18" fill="none" stroke="var(--hd-track)" strokeWidth="8" />
           <g transform="rotate(-90 30 30)">
             {arc(44, 0, "var(--hd-accent)")}

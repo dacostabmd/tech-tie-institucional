@@ -11,8 +11,7 @@
   },
   "Navbar": {
     "home": "Início",
-    "produtos": "Produtos",
-    "servicos": "Serviços",
+    "solucoes": "Soluções",
     "resultados": "Nossos Resultados",
     "contato": "Contato",
     "sobre": "Sobre a TechTie",
@@ -60,8 +59,7 @@
     "eyebrow": "Sobre a TechTie",
     "heading": "Tecnologia que nasceu da prática, para qualquer negócio",
     "paragraph1": "A TechTie nasceu da experiência do Dr. Bruno Durão, sócio da BMD Dap Advocacia, uma das maiores bancas do país, ao enfrentar na prática o mesmo problema que trava a maioria das empresas: informação espalhada entre planilhas, sistemas que não conversam entre si e processos manuais que consomem tempo da equipe. A solução construída para resolver isso virou produto — e hoje a TechTie leva essa mesma automação para negócios de qualquer segmento.",
-    "paragraph2": "Somos especialistas em automação agêntica (N8N, LangChain, LangFuse) e dominamos um stack completo para entregar sob medida: bancos de dados relacionais e não relacionais, PostgreSQL, Supabase, Hostinger, Angular, React, Next.js, Node.js, Python, Flutter, React Native, Firebase e Bitrix24. Sempre com visão clara da operação e decisões baseadas em dados, não em planilhas desatualizadas.",
-    "stackHeading": "Stack e tecnologias"
+    "paragraph2": "Somos especialistas em automação agêntica (N8N, LangChain, LangFuse) e dominamos um stack completo para entregar sob medida: bancos de dados relacionais e não relacionais, PostgreSQL, Supabase, Hostinger, Angular, React, Next.js, Node.js, Python, Flutter, React Native, Firebase e Bitrix24. Sempre com visão clara da operação e decisões baseadas em dados, não em planilhas desatualizadas."
   },
   "LeadSection": {
     "heading": "Agende uma consulta gratuita",
@@ -84,24 +82,8 @@
     "errorMissingFields": "Preencha nome e e-mail para continuar.",
     "errorInvalidEmail": "Informe um e-mail válido."
   },
-  "Products": {
-    "eyebrow": "Nossos produtos",
-    "heading": "Soluções prontas para a sua operação",
-    "intro": "Projetos ilustrativos organizados pelas soluções da TechTie — CRM, Business Intelligence e automação. Conteúdo de exemplo, a substituir por cases reais.",
-    "filterAll": "Todos",
-    "filterCrm": "CRM",
-    "filterBi": "Business Intelligence",
-    "filterAutomacao": "Automação",
-    "productCrmTitle": "CRM sob medida com Bitrix24",
-    "productDataEnrichTitle": "Enriquecimento de dados",
-    "productDashboardsTitle": "Dashboards de Inteligência (BI)",
-    "productOperationsTitle": "Soluções de gestão operacional",
-    "productAutomationTitle": "Automação agêntica e integrações com IA",
-    "productSitesTitle": "Sites e landing pages",
-    "placeholderNote": "Conteúdo ilustrativo"
-  },
-  "Services": {
-    "eyebrow": "Nossos serviços",
+  "Solutions": {
+    "eyebrow": "Nossas soluções",
     "heading": "Automação, BI e IA sob medida",
     "intro": "Projetos ilustrativos organizados pelos três pilares da TechTie — automação agêntica, Business Intelligence e inteligência artificial. Conteúdo de exemplo, a substituir por cases reais.",
     "filterAll": "Todos",
@@ -128,7 +110,6 @@
     "metricUptimeSuffix": "%",
     "testimonialsHeading": "O que dizem as empresas parceiras",
     "testimonialsIntro": "Depoimentos ilustrativos de empresas do grupo e parceiras da holding — conteúdo de exemplo, a ser substituído por casos reais.",
-    "testimonialPlaceholderNote": "Conteúdo ilustrativo — a substituir por depoimentos reais",
     "prevLabel": "Depoimento anterior",
     "nextLabel": "Próximo depoimento",
     "ctaHeading": "Quer ver sua operação nesta lista?",

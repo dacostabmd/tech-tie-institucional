@@ -15,37 +15,19 @@ import {
   ScalesIcon,
 } from "@/components/sections/hero-icons";
 import { ShinyText } from "@/components/react-bits/shiny-text";
-import RotatingText from "@/components/react-bits/rotating-text";
-
-// Stack citado no Hero via RotatingText. Nomes proprios, sem traducao.
-const STACK = [
-  "N8N",
-  "LangChain",
-  "LangFuse",
-  "PostgreSQL",
-  "Supabase",
-  "Next.js",
-  "React",
-  "Python",
-  "Node.js",
-  "Angular",
-  "Flutter",
-  "React Native",
-  "Firebase",
-  "Bitrix24",
-  "Hostinger",
-];
+import { StackIconsRow } from "@/components/react-bits/stack-icons-row";
+import { STACK_ICONS } from "@/components/sections/stack-icons";
 
 // Solucoes em duas colunas, abaixo do texto, na coluna da esquerda. A logo fica na
 // coluna da direita; os circuitos do WebGL ligam a logo aos tres cartoes da coluna
 // de cartoes mais proxima dela (indices impares).
 const cards: { key: string; href: string; Icon: ComponentType }[] = [
-  { key: "cardCrm", href: "/produtos", Icon: CrmIcon },
-  { key: "cardDataEnrich", href: "/produtos", Icon: DataEnrichIcon },
-  { key: "cardLawsuits", href: "/servicos", Icon: ScalesIcon },
-  { key: "cardOperations", href: "/produtos", Icon: GearsIcon },
-  { key: "cardDashboards", href: "/produtos", Icon: DashboardIcon },
-  { key: "cardAutomation", href: "/servicos", Icon: ChatBoltIcon },
+  { key: "cardCrm", href: "/solucoes", Icon: CrmIcon },
+  { key: "cardDataEnrich", href: "/solucoes", Icon: DataEnrichIcon },
+  { key: "cardLawsuits", href: "/solucoes", Icon: ScalesIcon },
+  { key: "cardOperations", href: "/solucoes", Icon: GearsIcon },
+  { key: "cardDashboards", href: "/solucoes", Icon: DashboardIcon },
+  { key: "cardAutomation", href: "/solucoes", Icon: ChatBoltIcon },
 ];
 
 /**
@@ -99,17 +81,6 @@ export function Hero() {
             })}
           </motion.p>
 
-          <motion.p
-            {...rise(0.26)}
-            className="mt-4 flex max-w-md flex-wrap items-baseline gap-x-2 text-sm text-foreground/70"
-          >
-            <span>{t("stackLabel")}</span>
-            <RotatingText
-              texts={STACK}
-              className="font-semibold text-gold-warm"
-            />
-          </motion.p>
-
           <ul className="mt-8 grid w-full max-w-[34rem] grid-cols-2 gap-3">
             {cards.map(({ key, href, Icon }, i) => (
               <li
@@ -154,6 +125,15 @@ export function Hero() {
           className="mx-auto aspect-[4/5] h-[min(40svh,22rem)] xl:mx-0 xl:mr-[4vw] xl:h-[min(52svh,34rem)]"
         />
       </div>
+
+      {/* Selo de stack tecnologico: secao propria, centralizada entre as duas colunas. */}
+      <motion.div
+        {...rise(0.3)}
+        className="relative z-10 mx-auto flex max-w-2xl flex-col items-center gap-3 px-6 pb-4 text-center"
+      >
+        <span className="text-sm text-foreground/70">{t("stackLabel")}</span>
+        <StackIconsRow icons={STACK_ICONS} className="justify-center" />
+      </motion.div>
 
       <div data-scene-anchor="hero-end" className="relative z-10 flex justify-center px-6 pt-4 pb-10" />
     </section>
