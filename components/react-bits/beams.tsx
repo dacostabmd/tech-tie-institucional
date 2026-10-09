@@ -10,9 +10,9 @@ import type { BeamsCanvasProps } from "./beams-canvas";
 const BeamsCanvas = dynamic(() => import("./beams-canvas"), { ssr: false });
 
 /**
- * Fundo "Beams" (React Bits). Camadas:
- * 1. fallback CSS estatico — aparece de imediato, sem JS e sem WebGL;
- * 2. canvas WebGL animado — entra em fade sobre o fallback quando pronto.
+ * Cena do hero (React Bits "Beams", adaptado): logo dourada e circuitos, desenhados
+ * em WebGL sobre transparente. Entra em fade quando o primeiro frame fica pronto;
+ * o fundo visual vem do Grainient, por baixo.
  */
 export function Beams({ className, ...props }: BeamsCanvasProps) {
   const [mounted, setMounted] = useState(false);
@@ -33,21 +33,11 @@ export function Beams({ className, ...props }: BeamsCanvasProps) {
 
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0", className)}>
-      <div
-        className={cn(
-          "absolute inset-0 transition-opacity duration-1000",
-          ready ? "opacity-0" : "opacity-100",
-        )}
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(90deg, transparent 0 6%, rgba(0,0,0,0.35) 9%, transparent 13%, transparent 20%, rgba(255,255,255,0.03) 23%, transparent 27%)",
-        }}
-      />
       {mounted && (
         <BeamsCanvas
           {...props}
           onReady={() => setReady(true)}
-          className="absolute inset-0 animate-[beams-in_1.2s_ease-out_both]"
+          className={cn("absolute inset-0 transition-opacity duration-1000", ready ? "opacity-100" : "opacity-0")}
         />
       )}
     </div>

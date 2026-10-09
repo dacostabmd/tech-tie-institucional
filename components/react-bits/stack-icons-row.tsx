@@ -26,34 +26,36 @@ export function StackIconsRow({ icons, sweepDuration = 4, className }: StackIcon
       {icons.map((icon, i) => (
         <Tooltip key={icon.name}>
           <TooltipTrigger asChild>
-            <motion.svg
+            <svg
               viewBox="0 0 24 24"
               role="img"
               aria-label={icon.name}
               tabIndex={0}
-              className="size-[2.90625em] shrink-0 fill-current text-gold-warm outline-none"
-              initial={false}
-              animate={
-                shouldReduceMotion
-                  ? undefined
-                  : {
-                      filter: [
-                        "drop-shadow(0 0 0px currentColor)",
-                        "drop-shadow(0 0 5px currentColor)",
-                        "drop-shadow(0 0 0px currentColor)",
-                      ],
-                    }
-              }
-              transition={{
-                duration: sweepDuration * 0.35,
-                delay: i * step,
-                repeat: Infinity,
-                repeatDelay: sweepDuration - sweepDuration * 0.35,
-                ease: "easeInOut",
-              }}
+              className="size-[2.90625em] shrink-0 overflow-visible fill-current text-gold-warm outline-none"
             >
-              <path d={icon.path} />
-            </motion.svg>
+              <motion.path
+                d={icon.path}
+                initial={false}
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        filter: [
+                          "drop-shadow(0 0 0px currentColor)",
+                          "drop-shadow(0 0 2.5px currentColor)",
+                          "drop-shadow(0 0 0px currentColor)",
+                        ],
+                      }
+                }
+                transition={{
+                  duration: sweepDuration * 0.35,
+                  delay: i * step,
+                  repeat: Infinity,
+                  repeatDelay: sweepDuration - sweepDuration * 0.35,
+                  ease: "easeInOut",
+                }}
+              />
+            </svg>
           </TooltipTrigger>
           <TooltipContent>{icon.name}</TooltipContent>
         </Tooltip>

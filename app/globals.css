@@ -153,17 +153,6 @@ body {
   }
 }
 
-/* Fundo: so tons de preto neutro, com #272727 como luz mais alta no centro. */
-.bg-executive {
-  background-color: #000;
-  background-image: radial-gradient(
-    circle at 50% 38%,
-    #272727 0%,
-    #141414 62%,
-    #000 100%
-  );
-}
-
 /* React Bits: Aurora, Shiny Text, Star Border (apenas transform/opacity/background-position) */
 @keyframes aurora-drift-1 {
   0%, 100% { transform: translate(0, 0) scale(1); }
@@ -182,11 +171,6 @@ body {
 
 @keyframes star-border-spin {
   to { transform: rotate(360deg); }
-}
-
-@keyframes beams-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .animate-aurora-drift-1 {

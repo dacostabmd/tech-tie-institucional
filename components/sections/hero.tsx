@@ -116,6 +116,16 @@ export function Hero() {
               </li>
             ))}
           </ul>
+          {/* Selo de stack tecnologico na coluna da esquerda, abaixo dos cartoes */}
+          <motion.div
+            {...rise(0.4)}
+            className="mt-8 flex w-full max-w-[34rem] flex-col items-start gap-2.5"
+          >
+            <span className="text-xs font-semibold tracking-wider text-foreground/70 uppercase">
+              {t("stackLabel")}
+            </span>
+            <StackIconsRow icons={STACK_ICONS} />
+          </motion.div>
         </div>
 
         {/* Coluna da direita: reserva o espaco da logo (proporcao 4:5) desenhada pelo WebGL. */}
@@ -126,16 +136,7 @@ export function Hero() {
         />
       </div>
 
-      {/* Selo de stack tecnologico: secao propria, centralizada entre as duas colunas. */}
-      <motion.div
-        {...rise(0.3)}
-        className="relative z-10 mx-auto flex max-w-2xl flex-col items-center gap-3 px-6 pb-4 text-center"
-      >
-        <span className="text-sm text-foreground/70">{t("stackLabel")}</span>
-        <StackIconsRow icons={STACK_ICONS} className="justify-center" />
-      </motion.div>
-
-      <div data-scene-anchor="hero-end" className="relative z-10 flex justify-center px-6 pt-4 pb-10" />
+      <div data-scene-anchor="hero-end" className="relative z-10 flex justify-center px-6 pt-2 pb-6" />
     </section>
   );
 }

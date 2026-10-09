@@ -2,31 +2,35 @@
 
 export type LeadFormState = {
   status: "idle" | "success" | "error";
-  reason?: "missing-fields" | "invalid-email";
+  reason?: "missing-fields" | "invalid-email" | "invalid-document" | "server-error";
+  message?: string;
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Server Action de demonstracao: apenas simula o envio do formulario de contato.
-// INTEGRACAO FUTURA: substituir o console.log abaixo por chamada real a um
-// CRM/servico de automacao (ex.: HubSpot, RD Station, webhook proprio) e
-// adicionar validacao/sanitizacao robusta dos campos antes de enviar.
-// Campos opcionais (company, whatsapp, origem) sao enviados apenas por
-// algumas variantes da landing page.
-//
-// O retorno carrega apenas um status/motivo (sem texto), para que a UI
-// (lead-form.tsx) resolva a mensagem localizada via next-intl.
+function cleanNumbers(val: string): string {
+  return val.replace(/\D/g, "");
+}
+
+/**
+ * Server Action para envio do formulário de contato / lead da TechTie.
+ * Conecta-se diretamente ao Bitrix24 via Webhook REST para criação de Card/Deal no Pipeline (Funil) configurado.
+ */
 export async function submitLeadForm(
   _prevState: LeadFormState,
   formData: FormData,
 ): Promise<LeadFormState> {
-  const name = formData.get("name")?.toString().trim();
-  const email = formData.get("email")?.toString().trim();
-  const company = formData.get("company")?.toString().trim();
-  const whatsapp = formData.get("whatsapp")?.toString().trim();
-  const origem = formData.get("origem")?.toString().trim();
+  const name = formData.get("name")?.toString().trim() || "";
+  const email = formData.get("email")?.toString().trim() || "";
+  const docType = (formData.get("docType")?.toString().trim() || "cnpj") as "cnpj" | "cpf";
+  const document = formData.get("document")?.toString().trim() || "";
+  const company = formData.get("company")?.toString().trim() || "";
+  const segment = formData.get("segment")?.toString().trim() || "";
+  const whatsapp = formData.get("whatsapp")?.toString().trim() || "";
+  const origem = formData.get("origem")?.toString().trim() || "Landing Page TechTie";
 
-  if (!name || !email) {
+  // Validação dos campos obrigatórios
+  if (!name || !email || !segment) {
     return { status: "error", reason: "missing-fields" };
   }
 
@@ -34,12 +38,107 @@ export async function submitLeadForm(
     return { status: "error", reason: "invalid-email" };
   }
 
-  console.log("[TechTie] Novo lead recebido (simulado):", {
+  const rawDoc = cleanNumbers(document);
+  if (docType === "cnpj" && rawDoc.length > 0 && rawDoc.length !== 14) {
+    return { status: "error", reason: "invalid-document" };
+  }
+  if (docType === "cpf" && rawDoc.length > 0 && rawDoc.length !== 11) {
+    return { status: "error", reason: "invalid-document" };
+  }
+
+  // Configuração Bitrix24
+  const webhookUrl =
+    process.env.BITRIX_WEBHOOK_URL ||
+    process.env.BITRIX24_WEBHOOK_URL;
+  const pipelineId =
+    process.env.BITRIX_PIPELINE_ID ||
+    process.env.BITRIX24_PIPELINE_ID ||
+    process.env.BITRIX24_CATEGORY_ID;
+  const entityType = (process.env.BITRIX_ENTITY_TYPE || "deal").toLowerCase();
+
+  const formattedDocType = docType === "cnpj" ? "Pessoa Jurídica (CNPJ)" : "Pessoa Física (CPF)";
+  const title = `[TechTie] ${name}${company ? ` - ${company}` : ` (${segment})`}`;
+
+  const comments =
+    `=== TECHTIE - SOLICITAÇÃO DE ESPECIALISTA ===\n` +
+    `👤 Nome: ${name}\n` +
+    `✉️ E-mail: ${email}\n` +
+    `📱 WhatsApp/Telefone: ${whatsapp || "Não informado"}\n` +
+    `🏷️ Tipo de Cadastro: ${formattedDocType}\n` +
+    `📄 Documento (${docType.toUpperCase()}): ${document || "Não informado"}\n` +
+    `🏢 Empresa: ${company || (docType === "cnpj" ? "Não informada" : "Pessoa Física / Autônomo")}\n` +
+    `💼 Segmento de Atuação: ${segment}\n` +
+    `🌐 Origem: ${origem}\n` +
+    `📅 Data/Hora: ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}`;
+
+  if (webhookUrl) {
+    try {
+      const cleanUrl = webhookUrl.replace(/\/+$/, "");
+      const isLead = entityType === "lead";
+      const endpoint = cleanUrl.endsWith(".json")
+        ? cleanUrl
+        : `${cleanUrl}/${isLead ? "crm.lead.add.json" : "crm.deal.add.json"}`;
+
+      const numericPipelineId =
+        pipelineId !== undefined && pipelineId !== "" ? Number(pipelineId) : undefined;
+
+      const payload = isLead
+        ? {
+            fields: {
+              TITLE: title,
+              NAME: name,
+              EMAIL: [{ VALUE: email, VALUE_TYPE: "WORK" }],
+              PHONE: whatsapp ? [{ VALUE: whatsapp, VALUE_TYPE: "WORK" }] : [],
+              COMPANY_TITLE: company || (docType === "cnpj" ? "Empresa a contatar" : ""),
+              COMMENTS: comments,
+              SOURCE_ID: "WEB",
+              OPENED: "Y",
+            },
+          }
+        : {
+            fields: {
+              TITLE: title,
+              CATEGORY_ID: numericPipelineId !== undefined && !isNaN(numericPipelineId) ? numericPipelineId : 0,
+              STAGE_ID: numericPipelineId ? `C${numericPipelineId}:NEW` : "NEW",
+              COMMENTS: comments,
+              SOURCE_ID: "WEB",
+              OPENED: "Y",
+            },
+          };
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("[TechTie Bitrix] Falha na API do Bitrix24:", res.status, errText);
+        return { status: "error", reason: "server-error" };
+      }
+
+      const result = await res.json().catch(() => ({}));
+      console.log(`[TechTie Bitrix] Card criado com sucesso no Bitrix24! ID:`, result?.result);
+      return { status: "success" };
+    } catch (err) {
+      console.error("[TechTie Bitrix] Exceção na chamada ao CRM:", err);
+      return { status: "error", reason: "server-error" };
+    }
+  }
+
+  // Em ambiente local sem BITRIX_WEBHOOK_URL definido, registra no console para homologação
+  console.log("[TechTie] Lead recebido (modo simulação/dev - adicione BITRIX_WEBHOOK_URL no .env.local para envio ao Bitrix):");
+  console.log({
     name,
     email,
+    docType,
+    document,
     company,
+    segment,
     whatsapp,
     origem,
+    pipelineId: pipelineId || 0,
   });
 
   return { status: "success" };

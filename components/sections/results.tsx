@@ -51,16 +51,18 @@ export async function Results() {
         </div>
       </section>
 
-      <section className="relative py-12 sm:py-16">
-        <div className="relative mx-auto max-w-5xl px-6">
-          <FadeIn className="max-w-2xl">
-            <h2 className="font-serif text-2xl font-semibold tracking-tight text-neon-white sm:text-3xl">
+      <section className="relative py-14 sm:py-20">
+        <div className="relative mx-auto max-w-5xl px-6 text-center">
+          <FadeIn className="mx-auto max-w-3xl">
+            <h2 className="font-serif text-3xl font-semibold tracking-tight text-neon-white sm:text-4xl">
               {t("testimonialsHeading")}
             </h2>
-            <p className="mt-3 text-muted-foreground">{t("testimonialsIntro")}</p>
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-muted-foreground">
+              {t("testimonialsIntro")}
+            </p>
           </FadeIn>
 
-          <FadeIn delay={0.1} className="mt-10">
+          <FadeIn delay={0.1} className="mt-12">
             <TestimonialCarousel />
           </FadeIn>
         </div>

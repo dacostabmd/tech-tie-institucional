@@ -5,13 +5,24 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { motion, useReducedMotion } from "motion/react";
+import { Home, Boxes, TrendingUp, MessageCircle, Building2, type LucideIcon } from "lucide-react";
 import { whatsappHref } from "@/lib/site-config";
 import { LanguageSwitcher } from "@/components/sections/language-switcher";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
+const NAV_ICONS: Record<string, LucideIcon> = {
+  "/": Home,
+  "/solucoes": Boxes,
+  "/resultados": TrendingUp,
+  "/contato": MessageCircle,
+  "/sobre": Building2,
+};
 
 /**
- * Trilho de navegacao em pill com indicador animado: o realce (fundo + traco
- * no topo) desliza entre os itens via layoutId, seguindo o item ativo pela
- * rota atual. Reaproveitado identico no desktop (topo) e mobile (rodape).
+ * Trilho de navegacao em pill, so com icones (lucide-react) e tooltip com o
+ * nome da pagina. O indicador animado (fundo + traco no topo) desliza entre
+ * os itens via layoutId, seguindo o item ativo pela rota atual. Reaproveitado
+ * identico no desktop (topo) e mobile (rodape).
  */
 function NavPill({ className, layoutId }: { className?: string; layoutId: string }) {
   const t = useTranslations("Navbar");
@@ -33,31 +44,38 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
     >
       {links.map((link) => {
         const active = pathname === link.href;
+        const Icon = NAV_ICONS[link.href];
         return (
-          <Link
-            key={link.href}
-            href={link.href}
-            prefetch
-            aria-current={active ? "page" : undefined}
-            className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
-              active ? "text-white" : "text-foreground/80 hover:text-gold-soft"
-            }`}
-          >
-            {active && (
-              <motion.span
-                layoutId={layoutId}
-                transition={
-                  shouldReduceMotion
-                    ? { duration: 0.01 }
-                    : { type: "spring", stiffness: 380, damping: 32 }
-                }
-                className="absolute inset-0 overflow-hidden rounded-full bg-gold"
+          <Tooltip key={link.href}>
+            <TooltipTrigger asChild>
+              <Link
+                href={link.href}
+                prefetch
+                aria-label={link.label}
+                aria-current={active ? "page" : undefined}
+                className={`relative flex h-10 items-center justify-center gap-2 rounded-full px-3 transition-colors xl:px-4 ${
+                  active ? "text-white" : "text-foreground/80 hover:text-gold-soft"
+                }`}
               >
-                <span className="absolute inset-x-3 top-0.5 h-[2px] rounded-full bg-white/70" />
-              </motion.span>
-            )}
-            <span className="relative">{link.label}</span>
-          </Link>
+                {active && (
+                  <motion.span
+                    layoutId={layoutId}
+                    transition={
+                      shouldReduceMotion
+                        ? { duration: 0.01 }
+                        : { type: "spring", stiffness: 380, damping: 32 }
+                    }
+                    className="absolute inset-0 overflow-hidden rounded-full bg-gold"
+                  >
+                    <span className="absolute inset-x-3 top-0.5 h-[2px] rounded-full bg-white/70" />
+                  </motion.span>
+                )}
+                <Icon className="relative size-[1.125rem] shrink-0" strokeWidth={1.75} aria-hidden="true" />
+                <span className="relative hidden text-sm xl:inline">{link.label}</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent className="xl:hidden">{link.label}</TooltipContent>
+          </Tooltip>
         );
       })}
     </nav>
