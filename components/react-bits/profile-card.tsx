@@ -76,7 +76,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   mobileTiltSensitivity = 5,
   miniAvatarUrl,
   name = "Dr. Bruno Durão",
-  title = "Fundador & Sócio",
+  title = "Fundador",
   handle = "drbrunodurao",
   status = "BMD Holding · DAP Advocacia",
   contactText = "Contato",
@@ -385,7 +385,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     maskRepeat: "repeat",
     maskSize: "150%",
     maskPosition: "top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x))",
-    filter: "brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.5)",
+    filter: "brightness(0.5) contrast(1.33) saturate(0.33) opacity(0.35)",
     animation: "pc-holo-bg 18s linear infinite",
     animationPlayState: "running" as const,
     mixBlendMode: "color-dodge" as const,
@@ -436,7 +436,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
       hsla(35, 40%, 25%, 0.8) 90%
     )`,
     mixBlendMode: "overlay",
-    filter: "brightness(0.85) contrast(1.15)",
+    filter: "brightness(0.65) contrast(1.15)",
     zIndex: 4,
     gridArea: "1 / -1",
     borderRadius: cardRadius,
@@ -520,11 +520,12 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                className="absolute bottom-[-1px] left-1/2 w-[105%] max-w-none transition-transform duration-[120ms] ease-out will-change-transform"
+                className="absolute left-1/2 w-[105%] max-w-none transition-transform duration-[120ms] ease-out will-change-transform"
                 src={avatarUrl}
                 alt={`${name || "User"} avatar`}
                 loading="eager"
                 style={{
+                  bottom: "clamp(-80px, -12vh, -60px)",
                   transformOrigin: "50% 100%",
                   transform:
                     "translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))",
@@ -609,10 +610,11 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                   {name}
                 </h3>
                 <p
-                  className="mx-auto mt-1 text-xs font-medium tracking-wide text-gold-soft uppercase"
+                  className="mx-auto mt-1 text-sm font-semibold tracking-wide text-gold-soft uppercase"
                   style={{
                     display: "block",
                     pointerEvents: "auto",
+                    textShadow: "0 1px 3px rgba(0, 0, 0, 0.8)",
                   }}
                 >
                   {title}

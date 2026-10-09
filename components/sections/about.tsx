@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { FadeIn } from "@/components/layout/fade-in";
 import { ProfileCard } from "@/components/react-bits/profile-card";
-import { VerticalStackWaterfall } from "@/components/react-bits/vertical-stack-waterfall";
+import { HorizontalStackMarquee } from "@/components/react-bits/horizontal-stack-marquee";
 import { Award, Building2, Scale, Sparkles } from "lucide-react";
 
 /** Sobre a TechTie: destino da rota "/sobre" com ProfileCard do Dr. Bruno Durão e storytelling institucional. */
@@ -9,7 +9,7 @@ export async function About() {
   const t = await getTranslations("About");
 
   return (
-    <section id="sobre-a-techtie" className="relative scroll-mt-8 py-16 sm:py-24">
+    <section id="sobre-a-techtie" className="relative scroll-mt-8 pt-28 pb-20 sm:pt-36 sm:pb-28">
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Bloco Principal: ProfileCard 3D do Dr. Bruno Durão ao lado da dissertação */}
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
@@ -20,7 +20,7 @@ export async function About() {
                 avatarUrl="/dr_bruno_sofa.png"
                 miniAvatarUrl="/dr_bruno_sofa.png"
                 name="Dr. Bruno Durão"
-                title="Fundador & Sócio"
+                title="Fundador"
                 handle="brunodurao"
                 status="BMD Holding · DAP Advocacia"
                 contactText="Contato"
@@ -68,32 +68,30 @@ export async function About() {
           </div>
         </div>
 
-        {/* Seção complementar: Engenharia e Stack Tecnológico com Cascata */}
-        <div className="mt-24 border-t border-border/60 pt-16 sm:mt-32 sm:pt-20">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-7">
-              <FadeIn>
-                <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-gold-soft uppercase">
-                  <Sparkles className="size-3.5 text-gold-warm" />
-                  <span>Stack & Engenharia</span>
-                </div>
-                <h2 className="mt-4 font-serif text-2xl font-semibold tracking-tight text-neon-white sm:text-3xl">
-                  Tecnologia de ponta a ponta para operações de alta escala
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                  Nossa infraestrutura combina agentes de inteligência artificial autônomos, pipelines de automação em N8N e LangChain, bancos de dados em alta disponibilidade e interfaces fluidas em Next.js e Flutter.
-                </p>
-                <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-                  Cada componente é selecionado para garantir segurança de dados corporativos, disponibilidade contínua e integração nativa com os sistemas centrais do seu negócio.
-                </p>
-              </FadeIn>
-            </div>
+        {/* Seção complementar: Engenharia e Stack Tecnológico Lado a Lado */}
+        <div className="mt-20 border-t border-border/60 pt-16 sm:mt-28 sm:pt-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <FadeIn>
+              <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-gold-soft uppercase">
+                <Sparkles className="size-3.5 text-gold-warm" />
+                <span>{t("stackEyebrow")}</span>
+              </div>
+              <h2 className="mt-4 font-serif text-2xl font-semibold tracking-tight text-neon-white sm:text-3xl lg:text-4xl">
+                {t("stackHeading")}
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                {t("stackDescription1")}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground/80 sm:text-base">
+                {t("stackDescription2")}
+              </p>
+            </FadeIn>
+          </div>
 
-            <div className="flex justify-center lg:col-span-5">
-              <FadeIn delay={0.15}>
-                <VerticalStackWaterfall />
-              </FadeIn>
-            </div>
+          <div className="mt-10 sm:mt-12">
+            <FadeIn delay={0.15}>
+              <HorizontalStackMarquee />
+            </FadeIn>
           </div>
         </div>
       </div>

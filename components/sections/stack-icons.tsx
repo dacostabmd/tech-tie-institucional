@@ -4,32 +4,36 @@
 
 import {
   siAngular,
+  siDocker,
+  siFastapi,
   siFirebase,
   siFlutter,
   siHostinger,
   siLangchain,
-  siN8n,
   siNextdotjs,
   siNodedotjs,
   siPostgresql,
   siPython,
   siReact,
   siSupabase,
+  siTypescript,
 } from "simple-icons";
 
-// Ordem de exibicao na fileira do Hero. LangFuse, Bitrix24 e React Native (mesmo
-// logo do React) ficam de fora por nao terem um logo proprio no simple-icons.
+// Ordem de exibicao na fileira do Hero.
 export const STACK_ICONS: { name: string; path: string }[] = [
-  { name: "N8N", path: siN8n.path },
   { name: "LangChain", path: siLangchain.path },
-  { name: "PostgreSQL", path: siPostgresql.path },
-  { name: "Supabase", path: siSupabase.path },
-  { name: "Next.js", path: siNextdotjs.path },
-  { name: "React", path: siReact.path },
   { name: "Python", path: siPython.path },
+  { name: "PostgreSQL", path: siPostgresql.path },
+  { name: "Next.js", path: siNextdotjs.path },
+  { name: "TypeScript", path: siTypescript.path },
+  { name: "Supabase", path: siSupabase.path },
+  { name: "React", path: siReact.path },
+  { name: "FastAPI", path: siFastapi.path },
   { name: "Node.js", path: siNodedotjs.path },
-  { name: "Angular", path: siAngular.path },
   { name: "Flutter", path: siFlutter.path },
+  { name: "Docker", path: siDocker.path },
   { name: "Firebase", path: siFirebase.path },
+  { name: "Angular", path: siAngular.path },
   { name: "Hostinger", path: siHostinger.path },
 ];
+
