@@ -12,6 +12,16 @@ function cleanNumbers(val: string): string {
   return val.replace(/\D/g, "");
 }
 
+const DEFAULT_PARTICIPANTS = [
+  { id: 1, name: "Bruno Durão" },
+  { id: 178968, name: "Caio Marques" },
+  { id: 8465, name: "Caio Araújo" },
+  { id: 5305, name: "Gabriel Alves" },
+  { id: 66366, name: "Henrique Gomes" },
+] as const;
+
+const PARTICIPANT_IDS = DEFAULT_PARTICIPANTS.map((p) => p.id);
+
 /**
  * Server Action para envio do formulário de contato / lead da TechTie.
  * Conecta-se diretamente ao Bitrix24 via Webhook REST para criação de Card/Deal no Pipeline (Funil) configurado.
@@ -65,6 +75,8 @@ export async function submitLeadForm(
   const formattedDocType = docType === "cnpj" ? "Pessoa Jurídica (CNPJ)" : "Pessoa Física (CPF)";
   const title = `[TechTie] ${name}${company ? ` - ${company}` : ` (${segment})`}`;
 
+  const participantsSummary = DEFAULT_PARTICIPANTS.map((p) => `${p.name} (ID: ${p.id})`).join(", ");
+
   const comments =
     `=== TECHTIE - SOLICITAÇÃO DE ESPECIALISTA ===\n` +
     `👤 Nome: ${name}\n` +
@@ -74,6 +86,7 @@ export async function submitLeadForm(
     `📄 Documento (${docType.toUpperCase()}): ${document || "Não informado"}\n` +
     `🏢 Empresa: ${company || (docType === "cnpj" ? "Não informada" : "Pessoa Física / Autônomo")}\n` +
     `💼 Segmento de Atuação: ${segment}\n` +
+    `👥 Participantes: ${participantsSummary}\n` +
     `🌐 Origem: ${origem}\n` +
     `📊 UTM: source=${utmSource || "-"} medium=${utmMedium || "-"} campaign=${utmCampaign || "-"} content=${utmContent || "-"} term=${utmTerm || "-"}\n` +
     `📅 Data/Hora: ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}`;
@@ -97,6 +110,9 @@ export async function submitLeadForm(
               EMAIL: [{ VALUE: email, VALUE_TYPE: "WORK" }],
               PHONE: whatsapp ? [{ VALUE: whatsapp, VALUE_TYPE: "WORK" }] : [],
               COMPANY_TITLE: company || (docType === "cnpj" ? "Empresa a contatar" : ""),
+              ASSIGNED_BY_ID: 1,
+              OBSERVERS: PARTICIPANT_IDS,
+              OBSERVER_IDS: PARTICIPANT_IDS,
               COMMENTS: comments,
               SOURCE_ID: "WEB",
               OPENED: "Y",
@@ -107,6 +123,9 @@ export async function submitLeadForm(
               TITLE: title,
               CATEGORY_ID: numericPipelineId !== undefined && !isNaN(numericPipelineId) ? numericPipelineId : 0,
               STAGE_ID: numericPipelineId ? `C${numericPipelineId}:NEW` : "NEW",
+              ASSIGNED_BY_ID: 1,
+              OBSERVERS: PARTICIPANT_IDS,
+              OBSERVER_IDS: PARTICIPANT_IDS,
               COMMENTS: comments,
               SOURCE_ID: "WEB",
               OPENED: "Y",
@@ -131,7 +150,34 @@ export async function submitLeadForm(
       }
 
       const result = await res.json().catch(() => ({}));
-      console.log(`[TechTie Bitrix] Card criado com sucesso no Bitrix24! ID:`, result?.result);
+      const createdId = result?.result;
+      console.log(`[TechTie Bitrix] Card criado com sucesso no Bitrix24! ID:`, createdId);
+
+      // Adiciona comentário na timeline notificando e marcando todos os participantes
+      if (createdId) {
+        const commentEndpoint = `${cleanUrl}/crm.timeline.comment.add.json`;
+        const mentions = DEFAULT_PARTICIPANTS.map((p) => `[USER=${p.id}]${p.name}[/USER]`).join(", ");
+        const commentPayload = {
+          fields: {
+            ENTITY_ID: createdId,
+            ENTITY_TYPE: isLead ? "lead" : "deal",
+            COMMENT:
+              `${mentions}\n\n` +
+              `🚀 Novo lead qualificado recebido via Landing Page TechTie!\n` +
+              `👤 Nome: ${name}\n` +
+              `📱 WhatsApp: ${whatsapp}\n` +
+              `✉️ E-mail: ${email}\n` +
+              `🏢 Empresa: ${company || (docType === "cnpj" ? "Não informada" : "Pessoa Física")}\n` +
+              `💼 Segmento: ${segment}`,
+          },
+        };
+        await fetch(commentEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(commentPayload),
+        }).catch((e) => console.error("[TechTie Bitrix] Erro ao adicionar menções na timeline:", e));
+      }
+
       return { status: "success" };
     } catch (err) {
       console.error("[TechTie Bitrix] Exceção na chamada ao CRM:", err);
