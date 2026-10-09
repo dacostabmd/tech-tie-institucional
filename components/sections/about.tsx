@@ -1,8 +1,18 @@
 import { getTranslations } from "next-intl/server";
-import { FadeIn } from "@/components/layout/fade-in";
+import { Link } from "@/i18n/navigation";
+import { FadeIn, StaggerContainer } from "@/components/layout/fade-in";
 import { ProfileCard } from "@/components/react-bits/profile-card";
 import { HorizontalStackMarquee } from "@/components/react-bits/horizontal-stack-marquee";
-import { Award, Building2, Scale, Sparkles } from "lucide-react";
+import BlurText from "@/components/react-bits/blur-text";
+import { StarBorder } from "@/components/react-bits/star-border";
+import { ShinyText } from "@/components/react-bits/shiny-text";
+import { Award, Building2, Scale, Sparkles, Workflow, Bot, LayoutGrid, ArrowUpRight } from "lucide-react";
+
+const BUILD_ITEMS = [
+  { icon: Workflow, key: "codeLawItem1" },
+  { icon: Bot, key: "codeLawItem2" },
+  { icon: LayoutGrid, key: "codeLawItem3" },
+] as const;
 
 /** Sobre a TechTie: destino da rota "/sobre" com ProfileCard do Dr. Bruno Durão e storytelling institucional. */
 export async function About() {
@@ -93,6 +103,67 @@ export async function About() {
               <HorizontalStackMarquee />
             </FadeIn>
           </div>
+        </div>
+
+        {/* Bloco "Código e Lei": manifesto institucional com CTA de diagnóstico */}
+        <div className="mt-20 border-t border-border/60 pt-16 sm:mt-28 sm:pt-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <FadeIn>
+              <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-gold-soft uppercase">
+                <Scale className="size-3.5 text-gold-warm" />
+                <span>{t("codeLawEyebrow")}</span>
+              </div>
+            </FadeIn>
+
+            <BlurText
+              as="h2"
+              text={t("codeLawHeading")}
+              className="mt-4 font-serif text-3xl font-semibold tracking-tight text-neon-white sm:text-4xl lg:text-[2.6rem]"
+            />
+
+            <FadeIn delay={0.1}>
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                {t("codeLawSubheading")}
+              </p>
+            </FadeIn>
+          </div>
+
+          <div className="mx-auto mt-10 max-w-4xl space-y-4 text-base leading-relaxed text-foreground/80 sm:text-[1.05rem]">
+            <FadeIn delay={0.15}>
+              <p>{t("codeLawParagraph1")}</p>
+            </FadeIn>
+          </div>
+
+          <StaggerContainer className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
+            {BUILD_ITEMS.map(({ icon: Icon, key }) => (
+              <FadeIn key={key} y={16}>
+                <div className="flex h-full flex-col items-center gap-3 rounded-2xl border border-border bg-card/80 p-6 text-center shadow-lg shadow-black/20 backdrop-blur-md transition-colors hover:border-gold-soft/50">
+                  <span className="flex size-11 items-center justify-center rounded-full bg-gold-muted/20 text-gold-warm">
+                    <Icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <p className="text-sm font-medium text-foreground/90 sm:text-base">{t(key)}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </StaggerContainer>
+
+          <FadeIn delay={0.1}>
+            <p className="mx-auto mt-10 max-w-3xl text-center text-sm text-muted-foreground sm:text-base">
+              {t("codeLawParagraph2")}
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.15} className="mt-10 flex justify-center">
+            <StarBorder>
+              <Link
+                href="/#cadastro"
+                className="flex items-center gap-2 rounded-[calc(var(--radius-lg)-1px)] px-7 py-3.5 text-sm font-semibold sm:text-base"
+              >
+                <ShinyText>{t("codeLawCta")}</ShinyText>
+                <ArrowUpRight className="size-4 text-gold-warm" aria-hidden="true" />
+              </Link>
+            </StarBorder>
+          </FadeIn>
         </div>
       </div>
     </section>

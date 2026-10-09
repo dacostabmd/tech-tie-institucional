@@ -14,7 +14,7 @@ const NAV_ICONS: Record<string, LucideIcon> = {
   "/": Home,
   "/solucoes": Boxes,
   "/resultados": TrendingUp,
-  "/contato": MessageCircle,
+  "/#cadastro": MessageCircle,
   "/sobre": Building2,
 };
 
@@ -33,7 +33,7 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
     { href: "/", label: t("home") },
     { href: "/solucoes", label: t("solucoes") },
     { href: "/resultados", label: t("resultados") },
-    { href: "/contato", label: t("contato") },
+    { href: "/#cadastro", label: t("contato") },
     { href: "/sobre", label: t("sobre") },
   ];
 
@@ -45,6 +45,7 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
       {links.map((link) => {
         const active = pathname === link.href;
         const Icon = NAV_ICONS[link.href];
+        const isCadastro = link.href === "/#cadastro";
         return (
           <Tooltip key={link.href}>
             <TooltipTrigger asChild>
@@ -53,6 +54,13 @@ function NavPill({ className, layoutId }: { className?: string; layoutId: string
                 prefetch
                 aria-label={link.label}
                 aria-current={active ? "page" : undefined}
+                onClick={(e) => {
+                  if (!isCadastro || pathname !== "/") return;
+                  const el = document.getElementById("cadastro");
+                  if (!el) return;
+                  e.preventDefault();
+                  el.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
+                }}
                 className={`relative flex h-10 items-center justify-center gap-2 rounded-full px-3 transition-colors xl:px-4 ${
                   active ? "text-white" : "text-foreground/80 hover:text-gold-soft"
                 }`}

@@ -118,7 +118,7 @@ function waves() {
     for (let i = -6; i <= 6; i++) {
       const cx = CX + (i + (j % 2) * 0.5) * 2 * r;
       out.push(
-        `<circle cx="${f(cx)}" cy="${f(cy)}" r="${r}" fill="#24190a" stroke="url(#gWave)" stroke-width="1"/>` +
+        `<circle cx="${f(cx)}" cy="${f(cy)}" r="${r}" fill="#060606" stroke="url(#gWave)" stroke-width="1"/>` +
           `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(r * 0.68)}" fill="none" stroke="url(#gWave)" stroke-width=".9"/>` +
           `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(r * 0.36)}" fill="none" stroke="url(#gWave)" stroke-width=".9"/>`,
       );

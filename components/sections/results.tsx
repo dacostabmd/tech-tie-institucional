@@ -76,7 +76,7 @@ export async function Results() {
             </h2>
             <p className="mt-3 text-muted-foreground">{t("ctaParagraph")}</p>
             <Link
-              href="/contato"
+              href="/#cadastro"
               className="mt-8 inline-flex items-center justify-center rounded-xl border border-gold-soft/60 px-6 py-3 text-sm text-gold-soft transition-colors hover:bg-gold-muted"
             >
               {t("ctaButton")}

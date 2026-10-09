@@ -4,7 +4,7 @@ import { getPathname } from "@/i18n/navigation";
 
 const siteUrl = "https://www.techtie.com.br";
 
-const paths = ["/", "/solucoes", "/resultados", "/contato", "/sobre"] as const;
+const paths = ["/", "/solucoes", "/resultados", "/sobre"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return paths.map((href) => ({

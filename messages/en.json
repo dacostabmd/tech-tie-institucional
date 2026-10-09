@@ -67,7 +67,16 @@
     "stackEyebrow": "Stack & Engineering",
     "stackHeading": "End-to-end modern technology for high-scale operations",
     "stackDescription1": "Our infrastructure combines autonomous AI agents built with LangChain and LangFuse, high-availability databases, and fluid interfaces crafted in Next.js and Flutter.",
-    "stackDescription2": "Every technology is selected to guarantee enterprise security, execution speed, and native integration with your core business ecosystems."
+    "stackDescription2": "Every technology is selected to guarantee enterprise security, execution speed, and native integration with your core business ecosystems.",
+    "codeLawEyebrow": "Code and law",
+    "codeLawHeading": "Software built by people who master both the code and the law.",
+    "codeLawSubheading": "Automation, artificial intelligence, and management systems for companies, firms, and institutions that cannot afford to get the business rules wrong.",
+    "codeLawParagraph1": "Complex systems fail when the people coding them don't understand the rule they're automating. That's why we pair developers with years of experience with the legal and business insight of Dr. Bruno Durão, lawyer and entrepreneur, to deliver solutions that work in practice and hold up under audit.",
+    "codeLawItem1": "Process automation and system integration",
+    "codeLawItem2": "Artificial intelligence applied to legal and operational workflows",
+    "codeLawItem3": "Operational and institutional management systems",
+    "codeLawParagraph2": "Every delivery goes through validation and sign-off against the client's business rules before going live.",
+    "codeLawCta": "Schedule a diagnostic"
   },
   "LeadSection": {
     "heading": "Schedule a consultation with our team",
@@ -109,13 +118,13 @@
       "consultoria": "Consulting / B2B Services",
       "outro": "Other sector"
     },
-    "whatsappLabel": "WhatsApp / Phone (optional)",
+    "whatsappLabel": "WhatsApp / Phone",
     "whatsappPlaceholder": "+55 (11) 99999-9999",
     "submit": "Talk to a specialist",
     "submitting": "Sending request...",
     "successTitle": "Request received successfully!",
     "successMessage": "We received your information. A TechTie specialist will contact you shortly to present the ideal solution for your operations.",
-    "errorMissingFields": "Please fill in all required fields (Name, Email, and Industry).",
+    "errorMissingFields": "Please fill in all required fields (Name, Email, WhatsApp, and Industry).",
     "errorInvalidEmail": "Enter a valid email address.",
     "errorInvalidDocument": "Enter a valid document number (CNPJ/CPF).",
     "errorServer": "An error occurred while processing. Please try again."

@@ -28,9 +28,15 @@ export async function submitLeadForm(
   const segment = formData.get("segment")?.toString().trim() || "";
   const whatsapp = formData.get("whatsapp")?.toString().trim() || "";
   const origem = formData.get("origem")?.toString().trim() || "Landing Page TechTie";
+  const utmSource = formData.get("utm_source")?.toString().trim() || "";
+  const utmMedium = formData.get("utm_medium")?.toString().trim() || "";
+  const utmCampaign = formData.get("utm_campaign")?.toString().trim() || "";
+  const utmContent = formData.get("utm_content")?.toString().trim() || "";
+  const utmTerm = formData.get("utm_term")?.toString().trim() || "";
 
   // Validação dos campos obrigatórios
-  if (!name || !email || !segment) {
+  const rawPhone = cleanNumbers(whatsapp);
+  if (!name || !email || !segment || !whatsapp || rawPhone.length < 10) {
     return { status: "error", reason: "missing-fields" };
   }
 
@@ -69,6 +75,7 @@ export async function submitLeadForm(
     `🏢 Empresa: ${company || (docType === "cnpj" ? "Não informada" : "Pessoa Física / Autônomo")}\n` +
     `💼 Segmento de Atuação: ${segment}\n` +
     `🌐 Origem: ${origem}\n` +
+    `📊 UTM: source=${utmSource || "-"} medium=${utmMedium || "-"} campaign=${utmCampaign || "-"} content=${utmContent || "-"} term=${utmTerm || "-"}\n` +
     `📅 Data/Hora: ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}`;
 
   if (webhookUrl) {
@@ -103,6 +110,11 @@ export async function submitLeadForm(
               COMMENTS: comments,
               SOURCE_ID: "WEB",
               OPENED: "Y",
+              UTM_SOURCE: utmSource || undefined,
+              UTM_MEDIUM: utmMedium || undefined,
+              UTM_CAMPAIGN: utmCampaign || undefined,
+              UTM_CONTENT: utmContent || undefined,
+              UTM_TERM: utmTerm || undefined,
             },
           };
 
@@ -139,6 +151,11 @@ export async function submitLeadForm(
     whatsapp,
     origem,
     pipelineId: pipelineId || 0,
+    utmSource,
+    utmMedium,
+    utmCampaign,
+    utmContent,
+    utmTerm,
   });
 
   return { status: "success" };

@@ -67,7 +67,16 @@
     "stackEyebrow": "Stack & Engenharia",
     "stackHeading": "Tecnologia de ponta a ponta para operações de alta escala",
     "stackDescription1": "Nossa infraestrutura combina agentes de inteligência artificial autônomos construídos com LangChain e LangFuse, bancos de dados em alta disponibilidade e interfaces fluidas em Next.js e Flutter.",
-    "stackDescription2": "Cada tecnologia é selecionada para garantir segurança corporativa, velocidade de execução e integração nativa com os ecossistemas centrais do seu negócio."
+    "stackDescription2": "Cada tecnologia é selecionada para garantir segurança corporativa, velocidade de execução e integração nativa com os ecossistemas centrais do seu negócio.",
+    "codeLawEyebrow": "Código e lei",
+    "codeLawHeading": "Software feito por quem domina o código e a lei.",
+    "codeLawSubheading": "Automação, inteligência artificial e sistemas de gestão para empresas, escritórios e instituições que não podem errar nas regras de negócio.",
+    "codeLawParagraph1": "Sistemas complexos falham quando quem programa não entende a regra que está automatizando. Por isso unimos desenvolvedores com anos de experiência à visão jurídica e empresarial do Dr. Bruno Durão, advogado e empresário, para entregar soluções que funcionam na prática e resistem à auditoria.",
+    "codeLawItem1": "Automação de processos e integração entre sistemas",
+    "codeLawItem2": "Inteligência artificial aplicada à rotina jurídica e operacional",
+    "codeLawItem3": "Sistemas de gestão operacional e institucionais",
+    "codeLawParagraph2": "Cada entrega passa por etapas de validação e homologação contra as regras de negócio do cliente antes de ir ao ar.",
+    "codeLawCta": "Agende um diagnóstico"
   },
   "LeadSection": {
     "heading": "Agende uma conversa com nosso time",
@@ -109,13 +118,13 @@
       "consultoria": "Consultoria / Serviços B2B",
       "outro": "Outro segmento"
     },
-    "whatsappLabel": "WhatsApp / Telefone (opcional)",
+    "whatsappLabel": "WhatsApp / Telefone",
     "whatsappPlaceholder": "(11) 99999-9999",
     "submit": "Falar com um especialista",
     "submitting": "Enviando solicitação...",
     "successTitle": "Cadastro recebido com sucesso!",
     "successMessage": "Recebemos seus dados. Um especialista da TechTie entrará em contato em breve para apresentar a solução ideal para a sua operação.",
-    "errorMissingFields": "Por favor, preencha todos os campos obrigatórios (Nome, E-mail e Segmento).",
+    "errorMissingFields": "Por favor, preencha todos os campos obrigatórios (Nome, E-mail, WhatsApp e Segmento).",
     "errorInvalidEmail": "Informe um e-mail corporativo válido.",
     "errorInvalidDocument": "Informe um número de documento (CNPJ/CPF) válido.",
     "errorServer": "Ocorreu um erro ao enviar. Por favor, tente novamente."

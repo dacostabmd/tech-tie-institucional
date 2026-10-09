@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { CheckCircle2, Building2, User, ChevronDown, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { submitLeadForm, type LeadFormState } from "@/app/actions/lead";
 
 const initialState: LeadFormState = { status: "idle" };
+
+// Parametros de UTM repassados ao Bitrix como campos padrao do Deal (ver app/actions/lead.ts).
+const UTM_PARAMS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
 
 const inputClassName =
   "h-11 w-full rounded-lg border border-input bg-card px-3.5 text-sm text-foreground outline-none placeholder:text-muted-foreground transition-all duration-200 focus-visible:border-gold-soft focus-visible:ring-2 focus-visible:ring-gold-soft/25";
@@ -45,6 +49,7 @@ function maskPhone(value: string): string {
 
 export function LeadForm() {
   const t = useTranslations("LeadForm");
+  const shouldReduceMotion = useReducedMotion();
   const [state, formAction, isPending] = useActionState(
     submitLeadForm,
     initialState,
@@ -53,6 +58,18 @@ export function LeadForm() {
   const [docType, setDocType] = useState<"cnpj" | "cpf">("cnpj");
   const [docNumber, setDocNumber] = useState("");
   const [phone, setPhone] = useState("");
+  const [utms, setUtms] = useState<Partial<Record<(typeof UTM_PARAMS)[number], string>>>({});
+
+  // UTMs lidas direto da URL no cliente (sem useSearchParams, para nao exigir Suspense aqui).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const found: typeof utms = {};
+    for (const key of UTM_PARAMS) {
+      const value = params.get(key);
+      if (value) found[key] = value;
+    }
+    setUtms(found);
+  }, []);
 
   const handleDocTypeChange = (type: "cnpj" | "cpf") => {
     setDocType(type);
@@ -99,35 +116,58 @@ export function LeadForm() {
       <input type="hidden" name="docType" value={docType} />
       <input type="hidden" name="origem" value="Landing Page TechTie" />
 
+      {/* UTMs capturadas da URL, repassadas ao Deal no Bitrix (funil TechTie 636) */}
+      {UTM_PARAMS.map((param) =>
+        utms[param] ? <input key={param} type="hidden" name={param} value={utms[param]} /> : null,
+      )}
+
       {/* Tipo de Documento: CNPJ ou CPF */}
       <div className="flex flex-col gap-1.5">
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {t("docTypeLabel")}
         </label>
-        <div className="grid grid-cols-2 gap-2 p-1 rounded-lg bg-card/60 border border-input">
+        <div className="relative grid grid-cols-2 gap-2 p-1 rounded-lg bg-card/60 border border-input">
           <button
             type="button"
             onClick={() => handleDocTypeChange("cnpj")}
-            className={`flex items-center justify-center gap-2 py-2 px-3 text-xs font-medium rounded-md transition-all duration-150 ${
+            className={`relative flex items-center justify-center gap-2 py-2 px-3 text-xs font-medium rounded-md transition-colors duration-200 cursor-pointer ${
               docType === "cnpj"
-                ? "bg-gold/15 text-gold border border-gold-soft/30 shadow-sm"
+                ? "text-gold font-semibold"
                 : "text-muted-foreground hover:text-foreground hover:bg-white/5"
             }`}
           >
-            <Building2 className="size-3.5" />
-            <span>{t("docTypeCnpj")}</span>
+            {docType === "cnpj" && (
+              <motion.div
+                layoutId="docTypeActivePill"
+                className="absolute inset-0 rounded-md bg-gold/15 border border-gold-soft/30 shadow-sm"
+                transition={{ type: "spring", stiffness: 450, damping: 32 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              <Building2 className="size-3.5" />
+              <span>{t("docTypeCnpj")}</span>
+            </span>
           </button>
           <button
             type="button"
             onClick={() => handleDocTypeChange("cpf")}
-            className={`flex items-center justify-center gap-2 py-2 px-3 text-xs font-medium rounded-md transition-all duration-150 ${
+            className={`relative flex items-center justify-center gap-2 py-2 px-3 text-xs font-medium rounded-md transition-colors duration-200 cursor-pointer ${
               docType === "cpf"
-                ? "bg-gold/15 text-gold border border-gold-soft/30 shadow-sm"
+                ? "text-gold font-semibold"
                 : "text-muted-foreground hover:text-foreground hover:bg-white/5"
             }`}
           >
-            <User className="size-3.5" />
-            <span>{t("docTypeCpf")}</span>
+            {docType === "cpf" && (
+              <motion.div
+                layoutId="docTypeActivePill"
+                className="absolute inset-0 rounded-md bg-gold/15 border border-gold-soft/30 shadow-sm"
+                transition={{ type: "spring", stiffness: 450, damping: 32 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              <User className="size-3.5" />
+              <span>{t("docTypeCpf")}</span>
+            </span>
           </button>
         </div>
       </div>
@@ -162,44 +202,53 @@ export function LeadForm() {
         />
       </div>
 
-      {/* Documento (CNPJ ou CPF) e Empresa lado a lado em telas maiores */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="document" className="text-xs font-medium text-muted-foreground">
-            {docType === "cnpj" ? t("docNumberLabelCnpj") : t("docNumberLabelCpf")}
-          </label>
-          <input
-            id="document"
-            name="document"
-            type="text"
-            value={docNumber}
-            onChange={handleDocChange}
-            className={inputClassName}
-            placeholder={
-              docType === "cnpj"
-                ? t("docNumberPlaceholderCnpj")
-                : t("docNumberPlaceholderCpf")
-            }
-          />
-        </div>
+      {/* Documento (CNPJ ou CPF) e Empresa com fade-in e fade-out suave */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={docType}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
+          transition={{ duration: shouldReduceMotion ? 0.01 : 0.2, ease: "easeOut" }}
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="document" className="text-xs font-medium text-muted-foreground">
+              {docType === "cnpj" ? t("docNumberLabelCnpj") : t("docNumberLabelCpf")}
+            </label>
+            <input
+              id="document"
+              name="document"
+              type="text"
+              value={docNumber}
+              onChange={handleDocChange}
+              className={inputClassName}
+              placeholder={
+                docType === "cnpj"
+                  ? t("docNumberPlaceholderCnpj")
+                  : t("docNumberPlaceholderCpf")
+              }
+            />
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="company" className="text-xs font-medium text-muted-foreground">
-            {docType === "cnpj" ? t("companyLabelCnpj") : t("companyLabelCpf")}
-          </label>
-          <input
-            id="company"
-            name="company"
-            type="text"
-            className={inputClassName}
-            placeholder={
-              docType === "cnpj"
-                ? t("companyPlaceholderCnpj")
-                : t("companyPlaceholderCpf")
-            }
-          />
-        </div>
-      </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="company" className="text-xs font-medium text-muted-foreground">
+              {docType === "cnpj" ? t("companyLabelCnpj") : t("companyLabelCpf")}
+            </label>
+            <input
+              id="company"
+              name="company"
+              type="text"
+              className={inputClassName}
+              placeholder={
+                docType === "cnpj"
+                  ? t("companyPlaceholderCnpj")
+                  : t("companyPlaceholderCpf")
+              }
+            />
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
       {/* Segmento da Empresa (Obrigatório) */}
       <div className="flex flex-col gap-1.5">
@@ -255,15 +304,16 @@ export function LeadForm() {
         </div>
       </div>
 
-      {/* WhatsApp / Telefone (Opcional) */}
+      {/* WhatsApp / Telefone (Obrigatório) */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="whatsapp" className="text-xs font-medium text-muted-foreground">
-          {t("whatsappLabel")}
+          {t("whatsappLabel")} <span className="text-gold">*</span>
         </label>
         <input
           id="whatsapp"
           name="whatsapp"
           type="tel"
+          required
           value={phone}
           onChange={handlePhoneChange}
           className={inputClassName}
