@@ -97,7 +97,7 @@
     "docNumberPlaceholderCnpj": "00.000.000/0001-00",
     "docNumberLabelCpf": "CPF / Tax ID",
     "docNumberPlaceholderCpf": "000.000.000-00",
-    "companyLabelCnpj": "Company / Business name",
+    "companyLabelCnpj": "Company Name",
     "companyPlaceholderCnpj": "Your company name",
     "companyLabelCpf": "Company / Project (optional)",
     "companyPlaceholderCpf": "Business or project name",

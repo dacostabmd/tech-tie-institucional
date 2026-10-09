@@ -306,9 +306,10 @@ export default function BeamsCanvas({ hero = false, onReady, className }: BeamsC
       pointer.x += (pointer.tx - pointer.x) * 0.06;
       pointer.y += (pointer.ty - pointer.y) * 0.06;
 
-      // Hero na tela: a cena segue viva a ~30 quadros/s; fora dele nao ha nada a animar.
+      // Hero na tela: a cena segue viva a ~30 quadros/s; fora dele pausa.
       const ambient = anchors !== null && window.scrollY < anchors.bottom;
       if (!ambient) {
+        if (anchors === null) draw();
         stop();
         return;
       }
@@ -323,6 +324,8 @@ export default function BeamsCanvas({ hero = false, onReady, className }: BeamsC
       if (running) return;
       running = true;
       last = performance.now();
+      refreshAnchors();
+      draw();
       frameId = requestAnimationFrame(tick);
     }
     function stop() {
@@ -333,13 +336,28 @@ export default function BeamsCanvas({ hero = false, onReady, className }: BeamsC
     let inView = false;
     const io = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
-      if (inView && !document.hidden) start();
-      else stop();
+      if (inView && !document.hidden) {
+        refreshAnchors();
+        draw();
+        start();
+      } else {
+        stop();
+      }
     });
     io.observe(container);
 
-    const onVisibility = () => (document.hidden || !inView ? stop() : start());
+    const onVisibility = () => {
+      if (document.hidden) {
+        stop();
+      } else {
+        refreshAnchors();
+        resize();
+        draw();
+        poke();
+      }
+    };
     document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("focus", onVisibility);
 
     // Parado, o canvas limpo pelo resize precisa de um redesenho imediato.
     redraw = () => {
@@ -353,7 +371,13 @@ export default function BeamsCanvas({ hero = false, onReady, className }: BeamsC
 
     // Qualquer interacao acorda o loop (scroll pode entrar/sair da janela "ambient").
     const poke = () => {
-      if (inView && !document.hidden) start();
+      refreshAnchors();
+      if (!document.hidden) {
+        draw();
+        if (anchors !== null && window.scrollY < anchors.bottom) {
+          start();
+        }
+      }
     };
 
     const onScroll = () => poke();
@@ -368,6 +392,18 @@ export default function BeamsCanvas({ hero = false, onReady, className }: BeamsC
       poke();
     };
     window.addEventListener("pointermove", onPointerMove, { passive: true });
+
+    // Observa mudancas de rota / DOM para reconectar ancoras automaticamente sem precisar de reload.
+    const mutationObserver = new MutationObserver(() => {
+      refreshAnchors();
+      anchorEls().forEach((el) => {
+        try {
+          anchorObserver.observe(el);
+        } catch {}
+      });
+      poke();
+    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     // Mobile derruba o contexto WebGL em segundo plano: recria ao voltar.
     const onContextLost = (e: Event) => {
@@ -387,7 +423,9 @@ export default function BeamsCanvas({ hero = false, onReady, className }: BeamsC
       io.disconnect();
       ro.disconnect();
       anchorObserver.disconnect();
+      mutationObserver.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("focus", onVisibility);
       window.removeEventListener("resize", onWindowResize);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointerMove);

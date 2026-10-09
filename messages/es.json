@@ -97,7 +97,7 @@
     "docNumberPlaceholderCnpj": "00.000.000/0001-00",
     "docNumberLabelCpf": "CPF",
     "docNumberPlaceholderCpf": "000.000.000-00",
-    "companyLabelCnpj": "Razón Social o Nombre Comercial",
+    "companyLabelCnpj": "Razón Social / Empresa",
     "companyPlaceholderCnpj": "Nombre de tu empresa",
     "companyLabelCpf": "Empresa / Proyecto (opcional)",
     "companyPlaceholderCpf": "Nombre de tu negocio o proyecto",

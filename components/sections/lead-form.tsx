@@ -213,8 +213,8 @@ export function LeadForm() {
           className="grid grid-cols-1 gap-4 sm:grid-cols-2"
         >
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="document" className="text-xs font-medium text-muted-foreground">
-              {docType === "cnpj" ? t("docNumberLabelCnpj") : t("docNumberLabelCpf")}
+            <label htmlFor="document" className="flex h-5 items-end text-xs font-medium text-muted-foreground">
+              <span className="truncate">{docType === "cnpj" ? t("docNumberLabelCnpj") : t("docNumberLabelCpf")}</span>
             </label>
             <input
               id="document"
@@ -232,8 +232,8 @@ export function LeadForm() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="company" className="text-xs font-medium text-muted-foreground">
-              {docType === "cnpj" ? t("companyLabelCnpj") : t("companyLabelCpf")}
+            <label htmlFor="company" className="flex h-5 items-end text-xs font-medium text-muted-foreground">
+              <span className="truncate">{docType === "cnpj" ? t("companyLabelCnpj") : t("companyLabelCpf")}</span>
             </label>
             <input
               id="company"

@@ -16,41 +16,6 @@ void main() {
   gl_Position = vec4(position, 0.0, 1.0);
 }`;
 
-type Pt = [number, number];
-
-// Trilhos da direita, em unidades de meia-altura da logo (origem no centro dela):
-// barramentos com dobras de 45 graus, como uma placa de circuito, que saem da
-// lamina e se perdem para a direita (a logo fica na coluna da direita do hero).
-const RIGHT_TRACES: { pts: Pt[]; seed: number; node?: boolean }[] = [
-  { pts: [[0.6, -0.55], [0.95, -0.55], [1.1, -0.8], [1.3, -0.8]], seed: 0.1, node: true },
-  { pts: [[0.46, -0.72], [0.72, -0.72], [0.9, -0.9], [1.05, -0.9], [1.2, -1.05], [1.4, -1.05]], seed: 0.55, node: true },
-  { pts: [[0.3, -1.0], [0.5, -1.0], [0.68, -1.18], [1.0, -1.18]], seed: 0.8, node: true },
-  { pts: [[0.9, -0.8], [1.1, -0.6], [1.3, -0.6]], seed: 0.3 },
-];
-
-// Nos extras (aneis) nas pontas dos ramais.
-const RIGHT_NODES: Pt[] = [[1.3, -0.6]];
-
-const f = (n: number) => (Number.isInteger(n) ? `${n}.0` : String(n));
-
-function traceBlock(pts: Pt[], seed: number, fade: string) {
-  let code = `  { vec2 best = vec2(1e3, 0.0); float s = 0.0;\n`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [ax, ay] = pts[i];
-    const [bx, by] = pts[i + 1];
-    code += `    segAcc(best, q, LP(${f(ax)}, ${f(ay)}), LP(${f(bx)}, ${f(by)}), s);\n`;
-  }
-  code += `    vec4 L = lineLight(best, ${f(seed)}, ${fade});\n    over(art, L.rgb, L.a); }\n`;
-  return code;
-}
-
-const rightTraces = RIGHT_TRACES.map((t) => traceBlock(t.pts, t.seed, "fadeR")).join("");
-const rightNodes = [
-  ...RIGHT_TRACES.filter((t) => t.node).map((t) => t.pts[0]),
-  ...RIGHT_NODES,
-]
-  .map(([x, y], i) => `  { vec4 N = nodeLight(q, LP(${f(x)}, ${f(y)}), ${i === 0 ? "0.0135" : "0.0105"}, ${f(i * 0.37)}, fadeR); over(art, N.rgb, N.a); }\n`)
-  .join("");
 
 export const fragment = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -138,11 +103,6 @@ void heroArt(inout vec4 art, vec2 q) {
   vec2 lc = uLogo.xy;
   float hw = uLogo.z;
   float hh = uLogo.w;
-  float fadeR = exp(-max(0.0, (q.x - lc.x) / hh - 0.6) * 1.8);
-
-  // Circuitos da direita (barramentos que saem da lamina).
-  if (q.x > lc.x + 0.1 * hh && q.x < lc.x + hh * 1.6 && q.y < lc.y + hh * 0.2 && q.y > lc.y - hh * 1.3) {
-${rightTraces}${rightNodes}  }
 
   // Circuitos da esquerda: da lamina ate os cartoes (nos ancorados no HTML).
   if (uCardsOn > 0.5 && q.x < lc.x - 0.1 * hh) {
